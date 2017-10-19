@@ -26,5 +26,4 @@ module TextTranslate
       translation
     end
   end
-
 end
