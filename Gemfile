@@ -19,5 +19,4 @@ gem 'reek'
 gem 'rubocop'
 
 # Google gems
-gem 'google-cloud-storage'
 gem 'google-cloud-translate'
