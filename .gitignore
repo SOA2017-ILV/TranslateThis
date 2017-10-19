@@ -51,3 +51,4 @@ build-iPhoneSimulator/
 
 # Ignore Keys and other confidential info
 config/secrets.yml
+config/*.json
