@@ -17,3 +17,6 @@ gem 'webmock'
 gem 'flog'
 gem 'reek'
 gem 'rubocop'
+
+# Google gems
+gem 'google-cloud-translate'
