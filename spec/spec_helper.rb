@@ -1,7 +1,7 @@
 # frozen_string_literal: false
 
-#require 'simplecov'
-#SimpleCov.start
+require 'simplecov'
+SimpleCov.start
 
 require 'yaml'
 
