@@ -53,7 +53,7 @@ describe 'Tests Translation library only' do
         _(result).must_match STRINGS[1][index]
       end
     end
-    
+
     # TODO: need some means of authetication checks
     # it 'SAD: should die on incorrect security credentials' do
     #   chinese_translator = TextTranslate::Translate.new(FAKE_CRED, 'zh-TW')
