@@ -10,7 +10,7 @@ describe 'Tests Translation library only' do
                   'Table',
                   'Fan',
                   'Lamp'].freeze
-  STRINGS = YAML.safe_load(File.read('../config/translatetextstrings.yml'))
+  STRINGS = YAML.safe_load(File.read('../config/translatetextstrings.yml.example'))
   # VCR configs
   VCR.configure do |c|
     c.cassette_library_dir = CASSETTES_FOLDER
