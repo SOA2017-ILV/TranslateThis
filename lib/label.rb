@@ -12,7 +12,7 @@ module GoogleVisionModule
     end
 
     def score
-      @repo['score']
+      @label['score']
     end
   end
 end

@@ -25,7 +25,7 @@ module GoogleVisionModule
       end
 
       def response_or_error
-        successful? ? @response : raise(HTTP_ERROR[@response.code])
+        successful? ? @response.parse : raise(HTTP_ERROR[@response.code])
       end
     end
 
@@ -39,7 +39,9 @@ module GoogleVisionModule
     def labels(image_url)
       labels_req_url = vision_api_path('images:annotate')
       labels_data = call_vision_url(labels_req_url, image_url)
-      labels_data.map { |data| Label.new(data) }
+      labels_data['responses'][0]['labelAnnotations'].map do |data|
+        Label.new(data)
+      end
     end
 
     private
