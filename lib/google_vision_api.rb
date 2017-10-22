@@ -1,22 +1,44 @@
 require 'http'
 require 'base64'
-require_relative 'labels.rb'
+require_relative 'label.rb'
 
 module GoogleVisionModule
+  module Errors
+    NotValid = Class.new(StandardError)
+    NotFound = Class.new(StandardError)
+    Unauthorized = Class.new(StandardError)
+  end
   # Class for Google Vision API
   class VisionAPI
+    # Encapsulates API response handling
+    class Response
+      HTTP_ERROR = {
+        400 => Errors::NotValid
+      }.freeze
+
+      def initialize(response)
+        @response = response
+      end
+
+      def successful?
+        HTTP_ERROR.keys.include?(@response.code) ? false : true
+      end
+
+      def response_or_error
+        successful? ? @response : raise(HTTP_ERROR[@response.code])
+      end
+    end
 
     API_URI = 'https://vision.googleapis.com/v1/'.freeze
 
     def initialize(api_token, cache: {})
       @api_token = api_token
       @cache = cache
-      @labels = []
     end
 
-    def labels(id)
-      labels_req_url = vision_api_path(['images:annotate', id].join('/'))
-      labels_data = call_sp_url(labels_req_url)
+    def labels(image_url)
+      labels_req_url = vision_api_path('images:annotate')
+      labels_data = call_vision_url(labels_req_url, image_url)
       labels_data.map { |data| Label.new(data) }
     end
 
@@ -35,10 +57,8 @@ module GoogleVisionModule
     end
 
     def call_vision_url(url, image_url)
-      result = @cache.fetch(url) do
-        HTTP.post(url, json: image_request(image_url))
-      end
-      result
+      result = HTTP.post(url, json: image_request(image_url))
+      Response.new(result).response_or_error
     end
   end
 end
