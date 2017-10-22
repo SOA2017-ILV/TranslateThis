@@ -8,7 +8,7 @@ end
 
 desc 'run tests'
 task :spec do
-  sh 'ruby spec/repo_spec.rb'
+  sh 'ruby spec/translate_this_spec.rb'
 end
 
 namespace :vcr do
