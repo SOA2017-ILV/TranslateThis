@@ -7,10 +7,8 @@ describe 'Tests TranslateThis library' do
     c.cassette_library_dir = CASSETTES_FOLDER
     c.hook_into :webmock
 
-    c.filter_sensitive_data('<VISION_TOKEN>') { VISION_TOKEN }
-    c.filter_sensitive_data('<VISION_TOKEN_ESC>') { CGI.escape(VISION_TOKEN) }
-    c.filter_sensitive_data('<TRANS_TOKEN>') { TRANS_TOKEN }
-    c.filter_sensitive_data('<TRANS_TOKEN_ESC>') { CGI.escape(TRANS_TOKEN) }
+    c.filter_sensitive_data('<GOOGLE_TOKEN>') { GOOGLE_TOKEN }
+    c.filter_sensitive_data('<GOOGLE_TOKEN_ESC>') { CGI.escape(GOOGLE_TOKEN) }
   end
 
   before do
@@ -25,16 +23,12 @@ describe 'Tests TranslateThis library' do
 
   describe 'Vision information' do
     it 'HAPPY: should identify labels' do
-      visions = GoogleVisionModule::VisionAPI.new(VISION_TOKEN).labels(IMAGE)
+      visions = GoogleVisionModule::VisionAPI.new(GOOGLE_TOKEN).labels(IMAGE)
       _(visions.count).must_equal CORRECT_VI['labels'].count
 
       descriptions = visions.map(&:description)
       correct_descriptions = CORRECT_VI['labels'].map { |l| l['description'] }
       _(descriptions).must_equal correct_descriptions
-
-      scores = visions.map(&:score)
-      correct_scores = CORRECT_VI['labels'].map { |l| l['score'] }
-      _(scores).must_equal correct_scores
     end
 
     it 'SAD: should raise exception invalid TOKEN' do
@@ -45,52 +39,35 @@ describe 'Tests TranslateThis library' do
 
     it 'SAD should raise file not found error' do
       proc do
-        GoogleVisionModule::VisionAPI.new(VISION_TOKEN).labels('bad_image.jpg')
+        GoogleVisionModule::VisionAPI.new(GOOGLE_TOKEN).labels('bad_image.jpg')
       end.must_raise Errno::ENOENT
     end
   end
 
   describe 'Translate information' do
-    it 'HAPPY: should return Google Cloud Translate Objects' do
-      chinese_translator = TextTranslate::Translate.new(TRANS_TOKEN, 'zh-TW')
-      STRINGS[0].map do |string|
-        result = chinese_translator.translate_text(string)
-        _(result).must_be_instance_of Google::Cloud::Translate::Translation
-      end
+    it 'HAPPY: should translate text to chinese' do
+      trans_api = GoogleTranslationModule::TranslationAPI.new(GOOGLE_TOKEN)
+      translation = trans_api.translate(['Hello world'], 'zh-TW')
+      trans_text = translation['data']['translations'][0]['translatedText']
+      correct_tr = CORRECT_TR['data']['translations'][0]['translatedText']
+      _(trans_text).must_equal correct_tr
     end
 
-    it 'HAPPY: should translate text strings so wont match initial' do
-      chinese_translator = TextTranslate::Translate.new(TRANS_TOKEN, 'zh-TW')
-      STRINGS[0].map do |string|
-        result = chinese_translator.translate_text(string)
-        _(result.text).wont_match string
-      end
+    it 'SAD: should raise exception invalid TOKEN' do
+      proc do
+        trans_api = GoogleTranslationModule::TranslationAPI.new('bad_token')
+        trans_api.translate(['Hello world'], 'zh-TW')
+      end.must_raise GoogleTranslationModule::Errors::NotValid
     end
 
-    it 'HAPPY: should translate text strings and match expected output' do
-      chinese_translator = TextTranslate::Translate.new(TRANS_TOKEN, 'zh-TW')
-      STRINGS[0].map.with_index do |string, index|
-        result = chinese_translator.translate_text(string)
-        _(result).must_match STRINGS[1][index]
-      end
-    end
-
-    # TODO: need some means of authetication checks
-    # it 'SAD: should die on incorrect security credentials' do
-    #   chinese_translator = TextTranslate::Translate.new(FAKE_CRED, 'zh-TW')
-    #   Test_strings.map do |string|
-    #     result = chinese_translator.translate_text(string)
-    #     _(result).must_be_instance_of Google::Cloud::Translate::Translation
+    # #TODO: Will we give error if translating o same language?
+    # it 'SAD: translate text to same language' do
+    #   english_translator = TextTranslate::Translate.new(GOOGLE_TOKEN, 'zh-TW')
+    #   # Test_strings.map do |string|
+    #   STRINGS[1].map.with_index do |string, index|
+    #     eng_result = english_translator.translate_text(string)
+    #     _(eng_result.origin).must_match STRINGS[1][index]
     #   end
     # end
-
-    it 'SAD: translate text to same language...WHY U DO THIS!!' do
-      english_translator = TextTranslate::Translate.new(TRANS_TOKEN, 'zh-TW')
-      # Test_strings.map do |string|
-      STRINGS[1].map.with_index do |string, index|
-        eng_result = english_translator.translate_text(string)
-        _(eng_result.origin).must_match STRINGS[1][index]
-      end
-    end
   end
 end
