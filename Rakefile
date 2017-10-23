@@ -38,10 +38,3 @@ namespace :quality do
     sh "flog #{CODE}"
   end
 end
-
-namespace :specs do
-  desc 'run spec files on API'
-  task :translate do
-    sh 'ruby ./spec/translation_spec.rb'
-  end
-end
