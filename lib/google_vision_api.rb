@@ -1,12 +1,13 @@
+# frozen_string_literal: false
+
 require 'http'
 require 'base64'
 require_relative 'label.rb'
 
 module GoogleVisionModule
   module Errors
+    # Invalid Token Error Class
     NotValid = Class.new(StandardError)
-    NotFound = Class.new(StandardError)
-    Unauthorized = Class.new(StandardError)
   end
   # Class for Google Vision API
   class VisionAPI
