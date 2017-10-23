@@ -1,0 +1,103 @@
+---
+https://vision.googleapis.com/v1/images:annotate?key=AIzaSyCXkLbILTbOaKadT02ZM80DeM8vEM4cP-0: !ruby/object:HTTP::Response
+  version: '1.1'
+  uri: !ruby/object:HTTP::URI
+    uri: !ruby/object:Addressable::URI
+      validation_deferred: false
+      scheme: https
+      host: vision.googleapis.com
+      path: "/v1/images:annotate"
+      query: key=AIzaSyCXkLbILTbOaKadT02ZM80DeM8vEM4cP-0
+      authority: vision.googleapis.com
+      uri_string: https://vision.googleapis.com/v1/images:annotate?key=AIzaSyCXkLbILTbOaKadT02ZM80DeM8vEM4cP-0
+      password: 
+      user: 
+      port: 
+  status: !ruby/marshalable:HTTP::Response::Status
+    :__v2__:
+    - :@code
+    ? - 200
+    : 200
+  headers: !ruby/object:HTTP::Headers
+    pile:
+    - - Content-Type
+      - application/json; charset=UTF-8
+    - - Vary
+      - X-Origin
+    - - Vary
+      - Referer
+    - - Vary
+      - Origin,Accept-Encoding
+    - - Date
+      - Fri, 20 Oct 2017 18:28:15 GMT
+    - - Server
+      - ESF
+    - - Cache-Control
+      - private
+    - - X-Xss-Protection
+      - 1; mode=block
+    - - X-Frame-Options
+      - SAMEORIGIN
+    - - X-Content-Type-Options
+      - nosniff
+    - - Alt-Svc
+      - quic=":443"; ma=2592000; v="39,38,37,35"
+    - - Accept-Ranges
+      - none
+    - - Connection
+      - close
+  proxy_headers: !ruby/object:HTTP::Headers
+    pile: []
+  content_type: !ruby/struct:HTTP::ContentType
+    mime_type: application/json
+    charset: UTF-8
+  body: !ruby/object:HTTP::Response::Body
+    stream: &1 !ruby/object:HTTP::Connection
+      persistent: false
+      keep_alive_timeout: 5.0
+      pending_request: false
+      pending_response: true
+      failed_proxy_connect: false
+      parser: !ruby/object:HTTP::Response::Parser
+        parser: !ruby/object:HTTP::Parser {}
+        finished: false
+        headers:
+          Content-Type: application/json; charset=UTF-8
+          Vary:
+          - X-Origin
+          - Referer
+          - Origin,Accept-Encoding
+          Date: Fri, 20 Oct 2017 18:28:15 GMT
+          Server: ESF
+          Cache-Control: private
+          X-XSS-Protection: 1; mode=block
+          X-Frame-Options: SAMEORIGIN
+          X-Content-Type-Options: nosniff
+          Alt-Svc: quic=":443"; ma=2592000; v="39,38,37,35"
+          Accept-Ranges: none
+          Connection: close
+        chunk: "{}\n"
+      socket: !ruby/object:HTTP::Timeout::Null
+        options: {}
+        socket: !ruby/object:OpenSSL::SSL::SSLSocket
+          context: !ruby/object:OpenSSL::SSL::SSLContext
+            verify_mode: 1
+            verify_hostname: true
+            cert_store: !ruby/object:OpenSSL::X509::Store
+              verify_callback: 
+              error: 
+              error_string: 
+              chain: 
+              time: 
+          io: !ruby/object:TCPSocket {}
+          eof: false
+          rbuffer: ''
+          sync: true
+          hostname: vision.googleapis.com
+          sync_close: true
+          wbuffer: ''
+      keep_alive: false
+    connection: *1
+    streaming: 
+    contents: 
+    encoding: !ruby/encoding UTF-8

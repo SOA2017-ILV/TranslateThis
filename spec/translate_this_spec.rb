@@ -1,3 +1,5 @@
+# frozen_string_literal: false
+
 require_relative 'spec_helper.rb'
 
 describe 'Tests TranslateThis library' do
@@ -22,7 +24,29 @@ describe 'Tests TranslateThis library' do
   end
 
   describe 'Vision information' do
-    it 'HAPPY: should return object in English for given image' do
+    it 'HAPPY: should identify labels' do
+      visions = GoogleVisionModule::VisionAPI.new(VISION_TOKEN).labels(IMAGE)
+      _(visions.count).must_equal CORRECT_VI['labels'].count
+
+      descriptions = visions.map(&:description)
+      correct_descriptions = CORRECT_VI['labels'].map { |l| l['description'] }
+      _(descriptions).must_equal correct_descriptions
+
+      scores = visions.map(&:score)
+      correct_scores = CORRECT_VI['labels'].map { |l| l['score'] }
+      _(scores).must_equal correct_scores
+    end
+
+    it 'SAD: should raise exception invalid TOKEN' do
+      proc do
+        GoogleVisionModule::VisionAPI.new('bad_token').labels(IMAGE)
+      end.must_raise GoogleVisionModule::Errors::NotValid
+    end
+
+    it 'SAD should raise file not found error' do
+      proc do
+        GoogleVisionModule::VisionAPI.new(VISION_TOKEN).labels('bad_image.jpg')
+      end.must_raise Errno::ENOENT
     end
   end
 
