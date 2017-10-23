@@ -27,7 +27,46 @@ describe 'Tests TranslateThis library' do
   end
 
   describe 'Translate information' do
-    it 'HAPPY: should return translation in Chinese for given image' do
+    it 'HAPPY: should return Google Cloud Translate Objects' do
+      chinese_translator = TextTranslate::Translate.new(TRANS_TOKEN, 'zh-TW')
+      STRINGS[0].map do |string|
+        result = chinese_translator.translate_text(string)
+        _(result).must_be_instance_of Google::Cloud::Translate::Translation
+      end
+    end
+
+    it 'HAPPY: should translate text strings so wont match initial' do
+      chinese_translator = TextTranslate::Translate.new(TRANS_TOKEN, 'zh-TW')
+      STRINGS[0].map do |string|
+        result = chinese_translator.translate_text(string)
+        _(result.text).wont_match string
+      end
+    end
+
+    it 'HAPPY: should translate text strings and match expected output' do
+      chinese_translator = TextTranslate::Translate.new(TRANS_TOKEN, 'zh-TW')
+      STRINGS[0].map.with_index do |string, index|
+        result = chinese_translator.translate_text(string)
+        _(result).must_match STRINGS[1][index]
+      end
+    end
+
+    # TODO: need some means of authetication checks
+    # it 'SAD: should die on incorrect security credentials' do
+    #   chinese_translator = TextTranslate::Translate.new(FAKE_CRED, 'zh-TW')
+    #   Test_strings.map do |string|
+    #     result = chinese_translator.translate_text(string)
+    #     _(result).must_be_instance_of Google::Cloud::Translate::Translation
+    #   end
+    # end
+
+    it 'SAD: translate text to same language...WHY U DO THIS!!' do
+      english_translator = TextTranslate::Translate.new(TRANS_TOKEN, 'zh-TW')
+      # Test_strings.map do |string|
+      STRINGS[1].map.with_index do |string, index|
+        eng_result = english_translator.translate_text(string)
+        _(eng_result.origin).must_match STRINGS[1][index]
+      end
     end
   end
 end

@@ -39,7 +39,7 @@ namespace :quality do
   end
 end
 
-namespace :spec do
+namespace :specs do
   desc 'run spec files on API'
   task :translate do
     sh 'ruby ./spec/translation_spec.rb'

@@ -9,7 +9,6 @@ module TextTranslate
   class Translate
     # TODO: impliment some form of translation cacheing
     # othewise we will always be translation stuff and killing our app
-    # TODO: figure out if i can get my project id from the google token directly
     def initialize(translate_api_key, destination_lang)
       @token = translate_api_key
       @googleproject = 'translate-this-183316'
