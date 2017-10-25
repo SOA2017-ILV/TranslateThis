@@ -17,6 +17,8 @@ gem 'dry-types'
 # Testing gems
 gem 'minitest'
 gem 'minitest-rg'
+gem 'pry'
+gem 'rack-test'
 gem 'rake'
 gem 'simplecov'
 gem 'vcr'

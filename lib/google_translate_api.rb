@@ -1,7 +1,7 @@
 # frozen_string_literal: false
 
 require 'http'
-require_relative 'translate.rb'
+# require_relative 'translate.rb'
 
 module TranslateThis
   module GoogleTranslation
