@@ -48,9 +48,8 @@ describe 'Tests TranslateThis library' do
     it 'HAPPY: should translate text to chinese' do
       trans_api = GoogleTranslationModule::TranslationAPI.new(GOOGLE_TOKEN)
       translation = trans_api.translate(['Hello world'], 'zh-TW')
-      trans_text = translation['data']['translations'][0]['translatedText']
       correct_tr = CORRECT_TR['data']['translations'][0]['translatedText']
-      _(trans_text).must_equal correct_tr
+      _(translation.translated_text).must_equal correct_tr
     end
 
     it 'SAD: should raise exception invalid TOKEN' do
