@@ -8,13 +8,15 @@ module TranslateThis
         @gateway = gateway
       end
 
-      def load(image_url)
+      def load_several(image_url)
         labels_data = @gateway.labels_data(image_url)
-        build_entity(labels_data)
+        labels_data.map do |label_data|
+          LabelMapper.build_entity(label_data)
+        end
       end
 
-      def build_entity(labels_data)
-        labels_data.map { |label_data| DataMapper.new(label_data).build_entity}
+      def self.build_entity(label_data)
+        DataMapper.new(label_data).build_entity
       end
 
       # Data Mapper entity builder class
