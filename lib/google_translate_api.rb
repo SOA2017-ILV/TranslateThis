@@ -1,7 +1,6 @@
 # frozen_string_literal: false
 
 require 'http'
-require_relative 'translate.rb'
 
 module TranslateThis
   module GoogleTranslation
@@ -38,12 +37,12 @@ module TranslateThis
       end
 
       def translate_data(query, target_lang)
-        trans_url = Api.translate_api_path('translate/v2')
+        trans_url = Api.translate_api_path('translate/v2', @api_token)
         call_trans_url(trans_url, query, target_lang).parse
       end
 
-      def self.translate_api_path(path)
-        API_URI + path + '?key=' + @api_token
+      def self.translate_api_path(path, api_token)
+        API_URI + path + '?key=' + api_token
       end
 
       private

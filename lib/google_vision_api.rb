@@ -2,7 +2,6 @@
 
 require 'http'
 require 'base64'
-require_relative 'label.rb'
 
 module TranslateThis
   module GoogleVision
@@ -33,21 +32,21 @@ module TranslateThis
 
       API_URI = 'https://vision.googleapis.com/v1/'.freeze
 
-      def initialize(api_token)
+      def initialize(api_token, cache: {})
         @api_token = api_token
         @cache = cache
       end
 
       def labels_data(image_url)
-        labels_req_url = Api.vision_api_path('images:annotate')
+        labels_req_url = Api.vision_api_path('images:annotate', @api_token)
         call_vision_url(labels_req_url, image_url).parse
         # labels_data['responses'][0]['labelAnnotations'].map do |data|
         #   Label.new(data)
         # end
       end
 
-      def self.vision_api_path(path)
-        API_URI + path + '?key=' + @api_token
+      def self.vision_api_path(path, api_token)
+        API_URI + path + '?key=' + api_token
       end
 
       private
