@@ -54,7 +54,8 @@ module TranslateThis
       def image_request(image_path)
         content = Base64.encode64(open(image_path).to_a.join)
         requests = [
-          { image: { content: content }, features: [{ type: 'LABEL_DETECTION' }] }
+          { image: { content: content },
+            features: [{ type: 'LABEL_DETECTION' }] }
         ]
         { requests: requests }
       end
