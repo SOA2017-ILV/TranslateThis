@@ -23,7 +23,7 @@ describe 'Tests TranslateThis library' do
 
   describe 'Vision information' do
     it 'HAPPY: should identify labels' do
-      visions = GoogleVisionModule::VisionAPI.new(GOOGLE_TOKEN).labels(IMAGE)
+      visions = TranslateThis::GoogleVision::Api.new(GOOGLE_TOKEN).labels_data(IMAGE)
       _(visions.count).must_equal CORRECT_VI['labels'].count
 
       descriptions = visions.map(&:description)

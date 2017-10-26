@@ -35,7 +35,7 @@ module TranslateThis
 
       def initialize(api_token)
         @api_token = api_token
-        @cache = cache
+        # @cache = cache
       end
 
       def labels_data(image_url)
