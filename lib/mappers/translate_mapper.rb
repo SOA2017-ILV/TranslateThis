@@ -29,7 +29,7 @@ module TranslateThis
         end
 
         def translated_text
-          @translate['data']['translations'][0]['translatedText']
+          @translate_data['data']['translations'][0]['translatedText']
         end
       end
     end
