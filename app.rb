@@ -23,28 +23,22 @@ module TranslateThis
       routing.root do
         { 'message' => "TranslateThis API v0.1 up in #{app.environment} MODE" }
       end
-
+      # /api/ branch
       routing.on 'api' do
-        # /api/v0.1 branch
         begin
-          # #TODO: Get file in HEX from user, pass it to vision
-
-          # #TODO: Get vision result and pass it to translate
         rescue StandardError
           routing.halt(404, error: 'Error on request. Please contact admins')
         end
-        routing.on 'v0.1' do
-          trans = TranslateThis::GoogleTranslation::Api.new(config.google_token)
-          t_mapper = TranslateThis::GoogleTranslation::TranslateMapper
-                     .new(trans)
-          vision = TranslateThis::GoogleVision::Api.new(config.google_token)
-          v_mapper = TranslateThis::GoogleVision::LabelMapper.new(vision)
-
-          { 'message' => "Implementation in progress!"}
-          routing.on 'testing' do
-            trans = TranslateThis::GoogleTranslation::Api.new(config.google_token)
-            t_mapper = TranslateThis::GoogleTranslation::TranslateMapper
-            t_mapper.load("test query",'zh-TW')
+        # /api/v0.1 branch
+        routing.is 'v0.1' do
+          # / api/v0.1 POST stuff happens here
+          routing.post do
+          end
+          # #TODO: Get file in HEX from user, pass it to vision
+          # #TODO: Get vision result and pass it to translate
+          # /api/v0.1 GET stuff happens here
+          routing.get do
+            { "stuff": 'happed here' }
           end
         end
       end
