@@ -11,6 +11,10 @@ task :spec do
   sh 'ruby spec/translate_this_spec.rb'
 end
 
+task :console do
+  sh 'pry -r ./spec/test_load_all'
+end
+
 namespace :vcr do
   desc 'delete cassette fixtures'
   task :wipe do
