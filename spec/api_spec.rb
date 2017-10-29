@@ -17,7 +17,10 @@ describe 'Tests TranslateThis library' do
   end
 
   describe 'API Tests' do
-
+    it 'HAPPY: should provide a 200 on root directory, we working' do
+      get "#{API_VER}"
+      _(last_response.status).must_equal 200
+    end
     # it 'HAPPY: should provide correct repo attributes' do
     #   get "#{API_VER}/repo/#{USERNAME}/#{REPO_NAME}"
     #   _(last_response.status).must_equal 200

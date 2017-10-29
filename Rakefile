@@ -11,6 +11,12 @@ task :spec do
   sh 'ruby spec/translate_this_spec.rb'
 end
 
+desc 'test web api'
+task :spec_api do
+  sh 'ruby spec/api_spec.rb'
+end
+
+desc 'run api console'
 task :console do
   sh 'pry -r ./spec/test_load_all'
 end
