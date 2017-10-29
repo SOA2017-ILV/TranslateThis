@@ -24,8 +24,10 @@ describe 'Tests TranslateThis library' do
   describe 'Vision information' do
     # TODO: Write test for Data Mapper Vision
     it 'HAPPY: should identify labels' do
-      visions = TranslateThis::GoogleVision::Api.new(GOOGLE_TOKEN).labels_data(IMAGE)
-      descriptions = visions['responses'][0]['labelAnnotations'].map { |l| l['description'] }
+      visions = TranslateThis::GoogleVision::Api.new(GOOGLE_TOKEN)
+                                                .labels_data(IMAGE)
+      descriptions = visions['responses'][0]['labelAnnotations']
+                     .map { |l| l['description'] }
       correct_descriptions = CORRECT_VI['labels'].map { |l| l['description'] }
       _(descriptions).must_equal correct_descriptions
     end
@@ -38,7 +40,8 @@ describe 'Tests TranslateThis library' do
 
     it 'SAD should raise file not found error' do
       proc do
-        TranslateThis::GoogleVision::Api.new(GOOGLE_TOKEN).labels_data('bad_img.jpg')
+        TranslateThis::GoogleVision::Api.new(GOOGLE_TOKEN)
+                                        .labels_data('bad_img.jpg')
       end.must_raise Errno::ENOENT
     end
   end
