@@ -11,9 +11,6 @@ require 'rack/test'
 require 'vcr'
 require 'webmock'
 
-# require_relative '../lib/google_translate_api.rb'
-# require_relative '../lib/google_vision_api.rb'
-# require_relative '../lib/translate_this.rb'
 require_relative 'test_load_all.rb'
 
 CONFIG = YAML.safe_load(File.read('./config/secrets.yml'))

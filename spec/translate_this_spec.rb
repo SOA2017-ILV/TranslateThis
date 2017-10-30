@@ -22,48 +22,53 @@ describe 'Tests TranslateThis library' do
   end
 
   describe 'Vision information' do
-    # TODO: Write test for Data Mapper Vision
     it 'HAPPY: should identify labels' do
-      visions = TranslateThis::GoogleVision::Api.new(GOOGLE_TOKEN)
-                                                .labels_data(IMAGE)
-      descriptions = visions['responses'][0]['labelAnnotations']
-                     .map { |l| l['description'] }
+      vision = TranslateThis::GoogleVision::Api.new(GOOGLE_TOKEN)
+      label_mapper = TranslateThis::GoogleVision::LabelMapper
+                     .new(vision)
+      labels = label_mapper.load_several(IMAGE)
+      descriptions = labels.map(&:description)
       correct_descriptions = CORRECT_VI['labels'].map { |l| l['description'] }
       _(descriptions).must_equal correct_descriptions
     end
 
     it 'SAD: should raise exception invalid TOKEN' do
       proc do
-        TranslateThis::GoogleVision::Api.new('bad_token').labels_data(IMAGE)
+        vision = TranslateThis::GoogleVision::Api.new('bad_token')
+        TranslateThis::GoogleVision::LabelMapper.new(vision).load_several(IMAGE)
       end.must_raise TranslateThis::GoogleVision::Api::Errors::NotValid
     end
 
     it 'SAD should raise file not found error' do
       proc do
-        TranslateThis::GoogleVision::Api.new(GOOGLE_TOKEN)
-                                        .labels_data('bad_img.jpg')
+        vision = TranslateThis::GoogleVision::Api.new(GOOGLE_TOKEN)
+        TranslateThis::GoogleVision::LabelMapper.new(vision)
+                                                .load_several('bad_img.jpg')
       end.must_raise Errno::ENOENT
     end
   end
 
   describe 'Translate information' do
-    # TODO: Write test for Data Mapper Translation
     it 'HAPPY: should translate text to chinese' do
-      trans_api = TranslateThis::GoogleTranslation::Api.new(GOOGLE_TOKEN)
-      translation = trans_api.translate_data(['Hello world'], 'zh-TW')
-      translated_text = translation['data']['translations'][0]['translatedText']
+      translation = TranslateThis::GoogleTranslation::Api
+                    .new(GOOGLE_TOKEN)
+      trans_mapper = TranslateThis::GoogleTranslation::TranslateMapper
+                     .new(translation)
+      translate = trans_mapper.load(['Hello world'], 'zh-TW')
       correct_tr = CORRECT_TR['data']['translations'][0]['translatedText']
-      _(translated_text).must_equal correct_tr
+      _(translate.translated_text).must_equal correct_tr
     end
 
     it 'SAD: should raise exception invalid TOKEN' do
       proc do
-        trans_api = TranslateThis::GoogleTranslation::Api.new('bad_token')
-        trans_api.translate_data(['Hello world'], 'zh-TW')
+        translation = TranslateThis::GoogleTranslation::Api
+                      .new('bad_token')
+        TranslateThis::GoogleTranslation::TranslateMapper
+          .new(translation).load(['Hello world'], 'zh-TW')
       end.must_raise TranslateThis::GoogleTranslation::Api::Errors::NotValid
     end
 
-    # #TODO: Will we give error if translating o same language?
+    # #TODO: Will we give error if translating to same language?
     # it 'SAD: translate text to same language' do
     #   english_translator = TextTranslate::Translate.new(GOOGLE_TOKEN, 'zh-TW')
     #   # Test_strings.map do |string|

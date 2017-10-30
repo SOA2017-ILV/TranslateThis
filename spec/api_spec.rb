@@ -18,21 +18,14 @@ describe 'Tests TranslateThis library' do
 
   describe 'API Tests' do
     it 'HAPPY: should provide a 200 on root directory, we working' do
-      get "#{API_VER}"
+      get ''
       _(last_response.status).must_equal 200
     end
-    # it 'HAPPY: should provide correct repo attributes' do
-    #   get "#{API_VER}/repo/#{USERNAME}/#{REPO_NAME}"
-    #   _(last_response.status).must_equal 200
-    #   repo_data = JSON.parse last_response.body
-    #   _(repo_data.size).must_be :>, 0
-    # end
-    #
-    # it 'SAD: should raise exception on incorrect repo' do
-    #   get "#{API_VER}/repo/#{USERNAME}/bad_repo"
-    #   _(last_response.status).must_equal 404
-    #   body = JSON.parse last_response.body
-    #   _(body.keys).must_include 'error'
-    # end
+    it 'SAD: should raise exception on POST without paremeters' do
+      post API_VER.to_s
+      _(last_response.status).must_equal 404
+      body = JSON.parse last_response.body
+      _(body.keys).must_include 'error'
+    end
   end
 end

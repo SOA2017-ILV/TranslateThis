@@ -27,7 +27,7 @@ http_interactions:
       - Referer
       - X-Origin
       Date:
-      - Mon, 23 Oct 2017 14:45:12 GMT
+      - Mon, 30 Oct 2017 03:32:50 GMT
       Server:
       - ESF
       Cache-Control:
@@ -39,7 +39,7 @@ http_interactions:
       X-Content-Type-Options:
       - nosniff
       Alt-Svc:
-      - quic=":443"; ma=2592000; v="39,38,37,35"
+      - quic=":443"; ma=2592000; v="41,39,38,37,35"
       Accept-Ranges:
       - none
       Connection:
@@ -57,7 +57,7 @@ http_interactions:
           }
         }
     http_version: 
-  recorded_at: Mon, 23 Oct 2017 14:45:11 GMT
+  recorded_at: Mon, 30 Oct 2017 03:32:50 GMT
 - request:
     method: post
     uri: https://translation.googleapis.com/language/translate/v2?key=bad_token
@@ -85,7 +85,7 @@ http_interactions:
       Content-Type:
       - application/json; charset=UTF-8
       Date:
-      - Mon, 23 Oct 2017 14:45:12 GMT
+      - Mon, 30 Oct 2017 03:32:50 GMT
       Server:
       - ESF
       Cache-Control:
@@ -97,7 +97,7 @@ http_interactions:
       X-Content-Type-Options:
       - nosniff
       Alt-Svc:
-      - quic=":443"; ma=2592000; v="39,38,37,35"
+      - quic=":443"; ma=2592000; v="41,39,38,37,35"
       Accept-Ranges:
       - none
       Connection:
@@ -120,7 +120,7 @@ http_interactions:
           }
         }
     http_version: 
-  recorded_at: Mon, 23 Oct 2017 14:45:11 GMT
+  recorded_at: Mon, 30 Oct 2017 03:32:50 GMT
 - request:
     method: post
     uri: https://vision.googleapis.com/v1/images:annotate?key=<GOOGLE_TOKEN>
@@ -148,7 +148,7 @@ http_interactions:
       - Referer
       - X-Origin
       Date:
-      - Mon, 23 Oct 2017 14:45:14 GMT
+      - Mon, 30 Oct 2017 03:32:52 GMT
       Server:
       - ESF
       Cache-Control:
@@ -160,7 +160,7 @@ http_interactions:
       X-Content-Type-Options:
       - nosniff
       Alt-Svc:
-      - quic=":443"; ma=2592000; v="39,38,37,35"
+      - quic=":443"; ma=2592000; v="41,39,38,37,35"
       Accept-Ranges:
       - none
       Connection:
@@ -175,12 +175,12 @@ http_interactions:
                 {
                   "mid": "/m/0bt9lr",
                   "description": "dog",
-                  "score": 0.8920207
+                  "score": 0.8920206
                 },
                 {
                   "mid": "/m/01z5f",
                   "description": "dog like mammal",
-                  "score": 0.88694125
+                  "score": 0.886941
                 },
                 {
                   "mid": "/m/08t9c_",
@@ -190,12 +190,12 @@ http_interactions:
                 {
                   "mid": "/m/0kpmf",
                   "description": "dog breed",
-                  "score": 0.8698737
+                  "score": 0.8698735
                 },
                 {
                   "mid": "/m/01c7cq",
                   "description": "grassland",
-                  "score": 0.7248693
+                  "score": 0.72486955
                 },
                 {
                   "mid": "/m/025st_8",
@@ -205,12 +205,12 @@ http_interactions:
                 {
                   "mid": "/m/05mqq3",
                   "description": "snout",
-                  "score": 0.6483445
+                  "score": 0.64834446
                 },
                 {
                   "mid": "/m/02wbgd",
                   "description": "english cocker spaniel",
-                  "score": 0.6269684
+                  "score": 0.6269688
                 },
                 {
                   "mid": "/m/02kysw",
@@ -220,14 +220,14 @@ http_interactions:
                 {
                   "mid": "/m/01gd91",
                   "description": "pasture",
-                  "score": 0.62508965
+                  "score": 0.62508976
                 }
               ]
             }
           ]
         }
     http_version: 
-  recorded_at: Mon, 23 Oct 2017 14:45:13 GMT
+  recorded_at: Mon, 30 Oct 2017 03:32:52 GMT
 - request:
     method: post
     uri: https://vision.googleapis.com/v1/images:annotate?key=bad_token
@@ -255,7 +255,7 @@ http_interactions:
       Content-Type:
       - application/json; charset=UTF-8
       Date:
-      - Mon, 23 Oct 2017 14:45:15 GMT
+      - Mon, 30 Oct 2017 03:32:53 GMT
       Server:
       - ESF
       Cache-Control:
@@ -267,7 +267,7 @@ http_interactions:
       X-Content-Type-Options:
       - nosniff
       Alt-Svc:
-      - quic=":443"; ma=2592000; v="39,38,37,35"
+      - quic=":443"; ma=2592000; v="41,39,38,37,35"
       Accept-Ranges:
       - none
       Connection:
@@ -294,5 +294,5 @@ http_interactions:
           }
         }
     http_version: 
-  recorded_at: Mon, 23 Oct 2017 14:45:14 GMT
+  recorded_at: Mon, 30 Oct 2017 03:32:53 GMT
 recorded_with: VCR 3.0.3
