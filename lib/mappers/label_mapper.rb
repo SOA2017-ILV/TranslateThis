@@ -10,7 +10,7 @@ module TranslateThis
 
       def load_several(image_url)
         labels_data = @gateway.labels_data(image_url)
-        labels_data.map do |label_data|
+        labels_data['responses'][0]['labelAnnotations'].map do |label_data|
           LabelMapper.build_entity(label_data)
         end
       end

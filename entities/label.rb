@@ -7,7 +7,7 @@ module TranslateThis
     # Domain entity object for Google Vision's Labels
     class Label < Dry::Struct
       attribute :description, Types::Strict::String
-      attribute :score, Types::Strict::String.optional
+      attribute :score, Types::Strict::Float.optional
     end
   end
 end

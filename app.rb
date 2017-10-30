@@ -31,14 +31,23 @@ module TranslateThis
         end
         # /api/v0.1 branch
         routing.is 'v0.1' do
-          # / api/v0.1 POST stuff happens here
+          # POST / api/v0.1
           routing.post do
-          end
-          # #TODO: Get file in HEX from user, pass it to vision
-          # #TODO: Get vision result and pass it to translate
-          # /api/v0.1 GET stuff happens here
-          routing.get do
-            { "stuff": 'happed here' }
+            vision = TranslateThis::GoogleVision::Api.new(config.google_token)
+            label_mapper = TranslateThis::GoogleVision::LabelMapper
+                           .new(vision)
+            translation = TranslateThis::GoogleTranslation::Api
+                          .new(config.google_token)
+            trans_mapper = TranslateThis::GoogleTranslation::TranslateMapper
+                           .new(translation)
+
+            labels = label_mapper.load_several(routing['img'][:tempfile])
+            label = labels[0].description
+            translate = trans_mapper.load(label, routing['target_lang'])
+            message = "Your picture was recognized as \"#{label}\" in English. "
+            message += "The translation to #{routing['target_lang']} is "
+            message += "\"#{translate.translated_text}\""
+            { 'message' => message }
           end
         end
       end
