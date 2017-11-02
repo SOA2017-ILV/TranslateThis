@@ -14,7 +14,7 @@ require 'webmock'
 require_relative 'test_load_all.rb'
 
 CONFIG = YAML.safe_load(File.read('./config/secrets.yml'))
-GOOGLE_TOKEN = CONFIG['test']['google_token']
+GOOGLE_TOKEN = CONFIG['google_token']
 IMAGE = 'spec/fixtures/demo-image.jpg'.freeze
 CORRECT_VI = YAML.safe_load(File.read('spec/fixtures/vision_results.yml'))
 CORRECT_TR = YAML.safe_load(File.read('spec/fixtures/translation_results.yml'))

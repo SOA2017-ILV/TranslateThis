@@ -2,7 +2,6 @@
 
 require 'roda'
 require 'econfig'
-require_relative 'lib/init.rb'
 
 module TranslateThis
   # Web API
