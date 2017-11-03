@@ -48,3 +48,43 @@ namespace :quality do
     sh "flog #{CODE}"
   end
 end
+
+namespace :db do
+  require_relative 'config/environment.rb'
+  require 'sequel'
+
+  Sequel.extension :migration
+  app = TranslateThis::Api
+
+  desc 'Run migrations'
+  task :migrate do
+    puts "Migrating #{app.environment} database to latest"
+    Sequel::Migrator.run(app.DB, 'infrastructure/database/migrations')
+  end
+
+  desc 'Drop all tables'
+  task :drop do
+    require_relative 'config/environment.rb'
+    # drop according to dependencies
+    app.DB.drop_table :languages
+    app.DB.drop_table :label_translations
+    app.DB.drop_table :images_labels
+    app.DB.drop_table :labels
+    app.DB.drop_table :images
+    app.DB.drop_table :schema_info
+  end
+
+  desc 'Reset all database tables'
+  task reset: [:drop, :migrate]
+
+  desc 'Delete dev or test database file'
+  task :wipe do
+    if app.environment == :production
+      puts 'Cannot wipe production database!'
+      return
+    end
+
+    FileUtils.rm(app.config.db_filename)
+    puts "Deleted #{app.config.db_filename}"
+  end
+end

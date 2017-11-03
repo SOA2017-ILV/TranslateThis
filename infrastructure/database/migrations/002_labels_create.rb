@@ -8,7 +8,7 @@ Sequel.migration do
       primary_key :id
       foreign_key :language_id, :languages
 
-      String label_text
+      String :label_text
       DateTime :created_at
       DateTime :updated_at
     end

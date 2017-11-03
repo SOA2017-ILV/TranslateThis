@@ -4,12 +4,10 @@ require 'sequel'
 
 Sequel.migration do
   change do
-    create_table(:label_translations) do
+    create_table(:languages) do
       primary_key :id
-      foreign_key :label_id, :labels
-      foreign_key :target_language_id, :languages
-
-      String :translated_text
+      String :language
+      String :code
       DateTime :created_at
       DateTime :updated_at
     end
