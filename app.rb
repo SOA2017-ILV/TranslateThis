@@ -31,7 +31,7 @@ module TranslateThis
             routing.post do
               label_mapper = TranslateThis::GoogleVision::LabelMapper
                              .new(app.config)
-              trans_mapper = TranslateThis::GoogleTranslation::TranslateMapper
+              trans_mapper = TranslateThis::GoogleTranslation::TranslationMapper
                              .new(app.config)
 
               labels = label_mapper.load_several(routing['img'][:tempfile])

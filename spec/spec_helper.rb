@@ -12,7 +12,7 @@ require 'vcr'
 require 'webmock'
 require 'ostruct'
 
-require_relative 'test_load_all.rb'
+require_relative 'test_load_all'
 
 CONFIG = YAML.safe_load(File.read('./config/secrets.yml'))
 IMAGE = 'spec/fixtures/demo-image.jpg'.freeze

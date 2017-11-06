@@ -3,7 +3,7 @@
 module TranslateThis
   module Repository
     # Repository for Translate Entities
-    class Translates
+    class Translations
       def self.find_id(id)
         db_record = Database::TranslationOrm.first(id: id)
         rebuild_entity(db_record)

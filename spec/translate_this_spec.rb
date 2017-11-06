@@ -15,9 +15,7 @@ describe 'Tests TranslateThis library' do
 
   describe 'Vision information' do
     it 'HAPPY: should identify labels' do
-      # vision = TranslateThis::GoogleVision::Api.new(app.config)
-      label_mapper = TranslateThis::GoogleVision::LabelMapper
-                     .new(app.config)
+      label_mapper = TranslateThis::GoogleVision::LabelMapper.new(app.config)
       labels = label_mapper.load_several(IMAGE)
       descriptions = labels.map(&:description)
       correct_descriptions = CORRECT_VI['labels'].map { |l| l['description'] }
@@ -43,7 +41,7 @@ describe 'Tests TranslateThis library' do
 
   describe 'Translate information' do
     it 'HAPPY: should translate text to chinese' do
-      trans_mapper = TranslateThis::GoogleTranslation::TranslateMapper
+      trans_mapper = TranslateThis::GoogleTranslation::TranslationMapper
                      .new(app.config)
       translate = trans_mapper.load(['Hello world'], 'zh-TW')
       correct_tr = CORRECT_TR['data']['translations'][0]['translatedText']
@@ -53,7 +51,7 @@ describe 'Tests TranslateThis library' do
     it 'SAD: should raise exception invalid TOKEN' do
       proc do
         sad_config = OpenStruct.new(google_token: 'sad_token')
-        trans_mapper = TranslateThis::GoogleTranslation::TranslateMapper
+        trans_mapper = TranslateThis::GoogleTranslation::TranslationMapper
                        .new(sad_config)
         trans_mapper.load(['Hello world'], 'zh-TW')
       end.must_raise TranslateThis::GoogleTranslation::Api::Errors::NotValid

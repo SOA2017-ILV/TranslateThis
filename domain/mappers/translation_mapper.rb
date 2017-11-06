@@ -3,7 +3,7 @@
 module TranslateThis
   module GoogleTranslation
     # Data Mapper object for Google Translate's Translation
-    class TranslateMapper
+    class TranslationMapper
       def initialize(config,
                      gateway_class = TranslateThis::GoogleTranslation::Api)
         @config = config
@@ -26,7 +26,7 @@ module TranslateThis
         end
 
         def build_entity
-          TranslateThis::Entity::Translate.new(
+          TranslateThis::Entity::Translation.new(
             translated_text: translated_text
           )
         end

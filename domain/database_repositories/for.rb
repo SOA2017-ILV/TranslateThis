@@ -3,8 +3,11 @@
 module TranslateThis
   module Repository
     For = {
+      Entity::Image         => Images,
+      Entity::Language      => Languages,
       Entity::Label         => Labels,
-      Entity::Translates    => Translates
+      Entity::ImageLabel    => ImageLabels,
+      Entity::Translations  => Translations
     }.freeze
   end
 end
