@@ -4,8 +4,10 @@ module TranslateThis
   module GoogleVision
     # Data Mapper object for Google Vision's Labels
     class LabelMapper
-      def initialize(gateway)
-        @gateway = gateway
+      def initialize(config, gateway_class = TranslateThis::GoogleVision::Api)
+        @config = config
+        @gateway_class = gateway_class
+        @gateway = @gateway_class.new(@config.google_token)
       end
 
       def load_several(image_url)

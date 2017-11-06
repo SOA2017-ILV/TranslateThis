@@ -4,8 +4,11 @@ module TranslateThis
   module GoogleTranslation
     # Data Mapper object for Google Translate's Translation
     class TranslateMapper
-      def initialize(gateway)
-        @gateway = gateway
+      def initialize(config,
+                     gateway_class = TranslateThis::GoogleTranslation::Api)
+        @config = config
+        @gateway_class = gateway_class
+        @gateway = @gateway_class.new(@config.google_token)
       end
 
       def load(query, target_lang)
