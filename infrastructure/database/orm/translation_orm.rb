@@ -3,7 +3,7 @@
 module TranslateThis
   module Database
     # Object Relational Mapper for Repo Entities
-    class TranslationOrm < Sequel::Model(:repos)
+    class TranslationOrm < Sequel::Model(:label_translations)
       many_to_one :label,
                   class: :'CodePraise::Database::LabelOrm'
 
