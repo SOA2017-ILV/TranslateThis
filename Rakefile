@@ -7,26 +7,29 @@ task :default do
 end
 
 desc 'run tests'
-task :spec do
-  sh 'ruby spec/translate_this_spec.rb'
+Rake::TestTask.new(:spec) do |t|
+  t.pattern = 'spec/*_spec.rb'
+  t.warning = false
 end
+# desc 'run tests'
+# task :spec do
+#   sh 'ruby spec/translate_this_spec.rb'
+# end
+#
+# desc 'test web api'
+# task :spec_api do
+#   sh 'ruby spec/api_spec.rb'
+# end
 
-desc 'test web api'
-task :spec_api do
-  sh 'ruby spec/api_spec.rb'
-end
-
-desc 'run api console'
+desc 'run console'
 task :console do
   sh 'pry -r ./spec/test_load_all'
 end
 
-namespace :vcr do
-  desc 'delete cassette fixtures'
-  task :wipe do
-    sh 'rm spec/fixtures/cassettes/*.yml' do |ok, _|
-      puts(ok ? 'Cassettes deleted' : 'No cassettes found')
-    end
+desc 'delete cassette fixtures'
+task :rmvcr do
+  sh 'rm spec/fixtures/cassettes/*.yml' do |ok, _|
+    puts(ok ? 'Cassettes deleted' : 'No cassettes found')
   end
 end
 
