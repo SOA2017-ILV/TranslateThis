@@ -11,15 +11,6 @@ Rake::TestTask.new(:spec) do |t|
   t.pattern = 'spec/*_spec.rb'
   t.warning = false
 end
-# desc 'run tests'
-# task :spec do
-#   sh 'ruby spec/translate_this_spec.rb'
-# end
-#
-# desc 'test web api'
-# task :spec_api do
-#   sh 'ruby spec/api_spec.rb'
-# end
 
 desc 'run console'
 task :console do
@@ -69,10 +60,10 @@ namespace :db do
   task :drop do
     require_relative 'config/environment.rb'
     # drop according to dependencies
-    app.DB.drop_table :languages
     app.DB.drop_table :label_translations
     app.DB.drop_table :images_labels
     app.DB.drop_table :labels
+    app.DB.drop_table :languages
     app.DB.drop_table :images
     app.DB.drop_table :schema_info
   end
