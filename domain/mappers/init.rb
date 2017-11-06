@@ -1,5 +1,9 @@
 # frozen_string_literal: false
 
-Dir.glob("#{File.dirname(__FILE__)}/*.rb").each do |file|
+# frozen_string_literal: true
+
+require 'sequel'
+
+Dir.glob("#{File.dirname(__FILE__)}/*_orm.rb").each do |file|
   require file
 end

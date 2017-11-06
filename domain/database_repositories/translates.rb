@@ -1,9 +1,13 @@
 # frozen_string_literal: true
 
-module CodePraise
+module TranslateThis
   module Repository
     # Repository for Translate Entities
     class Translates
+      def self.find_id(id)
+        db_record = Database::TranslationOrm.first(id: id)
+        rebuild_entity(db_record)
+      end
     end
   end
 end

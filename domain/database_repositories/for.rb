@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module CodePraise
+module TranslateThis
   module Repository
     For = {
       Entity::Label         => Labels,

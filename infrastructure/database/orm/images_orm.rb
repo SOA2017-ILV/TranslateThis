@@ -5,7 +5,7 @@ module TranslateThis
     # Object Relational Mapper for Repo Entities
     class ImageOrm < Sequel::Model(:images)
       many_to_many :labels,
-                   class: :'CodePraise::Database::LabelOrm',
+                   class: :'TranslateThis::Database::LabelOrm',
                    join_table: :images_labels,
                    left_key: :image_id, right_key: :label_id
 
