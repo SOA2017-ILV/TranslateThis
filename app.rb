@@ -29,13 +29,10 @@ module TranslateThis
           routing.is 'v0.1' do
             # POST / api/v0.1
             routing.post do
-              vision = TranslateThis::GoogleVision::Api.new(config.google_token)
               label_mapper = TranslateThis::GoogleVision::LabelMapper
-                             .new(vision)
-              translation = TranslateThis::GoogleTranslation::Api
-                            .new(config.google_token)
+                             .new(app.config)
               trans_mapper = TranslateThis::GoogleTranslation::TranslateMapper
-                             .new(translation)
+                             .new(app.config)
 
               labels = label_mapper.load_several(routing['img'][:tempfile])
               label = labels[0].description
