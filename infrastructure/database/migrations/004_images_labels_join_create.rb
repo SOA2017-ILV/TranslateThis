@@ -10,7 +10,6 @@ Sequel.migration do
       primary_key [:image_id, :label_id]
       index [:image_id, :label_id]
 
-      Float :vision_score
       DateTime :created_at
       DateTime :updated_at
     end
