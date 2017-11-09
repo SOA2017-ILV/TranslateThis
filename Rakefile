@@ -46,6 +46,7 @@ end
 namespace :db do
   require_relative 'config/environment.rb'
   require 'sequel'
+  require 'sequel/extensions/seed'
 
   Sequel.extension :migration
   app = TranslateThis::Api
@@ -54,6 +55,13 @@ namespace :db do
   task :migrate do
     puts "Migrating #{app.environment} database to latest"
     Sequel::Migrator.run(app.DB, 'infrastructure/database/migrations')
+  end
+
+  desc 'Seeds the development database'
+  task :seed do
+    Sequel::Seed.setup(:development)
+    Sequel.extension :seed
+    Sequel::Seeder.apply(app.DB, 'infrastructure/database/seeds')
   end
 
   desc 'Drop all tables'
@@ -69,7 +77,7 @@ namespace :db do
   end
 
   desc 'Reset all database tables'
-  task reset: [:drop, :migrate]
+  task reset: [:drop, :migrate, :seed]
 
   desc 'Delete dev or test database file'
   task :wipe do

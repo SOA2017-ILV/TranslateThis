@@ -1,0 +1,35 @@
+##still have more to add
+---
+  -
+    language: English
+    code: en
+  -
+    language: Chinese (Simplified)
+    code: zh-CN
+  -
+    language: Chinese (Traditional)
+    code: zh-TW
+  -
+    language: French
+    code: fr
+  -
+    language: German
+    code: de
+  -
+    language: Hindi
+    code:	hi
+  -
+    language: Japanese
+    code: ja
+  -
+    language: Latin
+    code: la
+  -
+    language: Lithuanian
+    code: lt
+  -
+    language: Portuguese
+    code: pt
+  -
+    language: Spanish
+    code: es

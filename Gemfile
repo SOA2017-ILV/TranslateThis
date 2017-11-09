@@ -13,6 +13,7 @@ gem 'roda'
 # Database related
 gem 'hirb'
 gem 'sequel'
+gem 'sequel-seed'
 
 # Data gems
 gem 'dry-struct'
