@@ -1,6 +1,7 @@
 # frozen_string_literal: false
 
-require 'dry-struct'
+require_relative 'language.rb'
+require_relative 'label.rb'
 
 module TranslateThis
   module Entity

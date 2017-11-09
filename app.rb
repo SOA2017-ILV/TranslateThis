@@ -29,6 +29,12 @@ module TranslateThis
           routing.is 'v0.1' do
             # POST / api/v0.1
             routing.post do
+              # TODO: Hash image
+              # TODO: Check if hashed image is already on DB, if not, save
+              # TODO: Save image to DB
+              # TODO: Get labels from GoogleVision or from DB
+              # TODO: Check if label already has translation to target_lang
+              # TODO: Get translation from GoogleTranslation or DB and return
               label_mapper = TranslateThis::GoogleVision::LabelMapper
                              .new(app.config)
               trans_mapper = TranslateThis::GoogleTranslation::TranslationMapper
