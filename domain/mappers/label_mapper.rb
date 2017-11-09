@@ -13,7 +13,7 @@ module TranslateThis
       def load_several(image_url)
         labels_data = @gateway.labels_data(image_url)
         labels_data['responses'][0]['labelAnnotations'].map do |label_data|
-          LabelMapper.build_entity(label_data)
+          build_entity(label_data)
         end
       end
 
@@ -29,17 +29,12 @@ module TranslateThis
 
         def build_entity
           TranslateThis::Entity::Label.new(
-            description: description,
-            score: score
+            label_text: description
           )
         end
 
         def description
           @label_data['description']
-        end
-
-        def score
-          @label_data['score']
         end
       end
     end
