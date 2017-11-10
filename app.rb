@@ -2,6 +2,7 @@
 
 require 'roda'
 require 'econfig'
+require 'rbnacl/libsodium'
 
 module TranslateThis
   # Web API
@@ -41,11 +42,14 @@ module TranslateThis
                              .new(app.config)
 
               labels = label_mapper.load_several(routing['img'][:tempfile])
+              hash = RbNaCl::Hash.SHA256(routing['img'][:tempfile])
               label = labels[0].description
               translate = trans_mapper.load(label, routing['target_lang'])
               message = "Your picture was recognized as \"#{label}\" in English"
               message += ". The translation to #{routing['target_lang']} is "
               message += "\"#{translate.translated_text}\""
+              message += 'I also made a Hash for you, it is '
+              message += "\"#{hash}\""
               { 'message' => message }
             end
           end
