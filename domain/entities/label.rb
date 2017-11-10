@@ -8,7 +8,7 @@ module TranslateThis
     class Label < Dry::Struct
       attribute :id, Types::Int.optional
       attribute :label_text, Types::Strict::String
-      attribute :target_language, Language
+      attribute :origin_language, Language
     end
   end
 end

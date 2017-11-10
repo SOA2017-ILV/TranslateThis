@@ -9,45 +9,34 @@ module TranslateThis
         rebuild_entity(db_record)
       end
 
-      def self.find(entity)
-        find_language_code(entity.language_code)
-      end
-
-      def self.find_language_id(id)
-        db_language = Database::LanguageOrm.first(id: id)
-        rebuild_entity(db_language)
-      end
-
-      def find_or_create(language_obj)
-        find_language_code(language_obj) || create(label_obj)
+      def find_or_create(entity)
+        find_language_code(entity) || create_from(entity)
       end
 
       def self.find_language_code(language_code)
-        db_lang = Database::LanguageOrm.first(code: language_code)
-        rebuild_entity(db_lang)
+        db_record = Database::LanguageOrm.first(code: language_code)
+        rebuild_entity(db_record)
       end
 
       def self.all
         Database::LangugaOrm.all.map { |db_lang| rebuild_entity(db_lang) }
       end
 
-      def self.create(language_obj)
-        raise 'Language Already Exists in DB' if find(language_obj)
-
+      def self.create_from(entity)
         db_language = Database::LanguageOrm.create(
-          language: language_obj.language,
-          code: language_obj.code
+          language: entity.language,
+          code: entity.code
         )
         rebuild_entity(db_language)
       end
 
-      def self.rebuild_entity(db_language)
-        return nil unless db_language
+      def self.rebuild_entity(db_record)
+        return nil unless db_record
 
         Entity::Language.new(
-          id: db_language.id,
-          language: db_language.language,
-          code: db_language.code
+          id: db_record.id,
+          language: db_record.language,
+          code: db_record.code
         )
       end
     end

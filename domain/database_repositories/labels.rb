@@ -9,25 +9,22 @@ module TranslateThis
         rebuild_entity(db_record)
       end
 
-      def self.find(entity)
-        find_label(entity.label_text)
+      def self.find_label_text(label_text)
+        db_record = Database::LabelOrm.first(label_text: label_text)
+        rebuild_entity(db_record)
       end
 
-      def self.find_label(text)
-        db_label = Database::LabelOrm.first(translated_text: text)
-        rebuild_entity(db_label)
+      def find_or_create(entity)
+        find_label_text(entity.label_text) || create_from(label_obj)
       end
 
-      def find_or_create(label_obj)
-        find_label(label_obj.label_text) || create(label_obj)
-      end
-
-      def self.create(label_obj)
-        raise 'Already Exists in DB' if find(label_obj)
+      def self.create_from(entity)
+        new_language = Languages.find_or_create(entity.origin_language)
+        db_language = Database::LanguageOrm.first(id: new_language.id)
 
         db_label = Database::LabelOrm.create(
-          language_id: Languages.rebuild_entity(label_obj.languae_id),
-          label_text: label_obj.label_text
+          language_id: db_language.id,
+          label_text: entity.label_text
         )
         rebuild_entity(db_label)
       end
@@ -36,13 +33,13 @@ module TranslateThis
         Database::LabelOrm.all.map { |db_label| rebuild_entity(db_label) }
       end
 
-      def self.rebuild_entity(db_label)
-        return nil unless db_label
+      def self.rebuild_entity(db_record)
+        return nil unless db_record
 
         Entity::Label.new(
-          id: db_label.id,
-          language: db_label.label_text,
-          code: db_label.target_language
+          id: db_record.id,
+          language: db_record.label_text,
+          code: db_record.target_language
         )
       end
     end
