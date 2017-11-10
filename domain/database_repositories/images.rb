@@ -9,52 +9,52 @@ module TranslateThis
         rebuild_entity(db_record)
       end
 
-      def self.find(entity)
-        find_image_url(entity.image_url)
+      def self.find_hash_summary(hash_summary)
+        db_record = Database::ImageOrm.first(hash_summary: hash_summary)
+        rebuild_entity(db_record)
       end
 
-      def self.find_hash(hash)
-        db_image = Database::ImageOrm.first(hash_summary: hash)
-        rebuild_entity(db_image)
+      def self.find_image_url(image_url)
+        db_record = Database::ImageOrm.first(image_url: image_url)
+        rebuild_entity(db_record)
       end
 
-      def self.find_url(url)
-        db_image = Database::ImageOrm.first(image_url: url)
-        rebuild_entity(db_image)
+      def self.find_or_create(entity)
+        # TODO: Replace by find_hash_summary once function is implemented
+        find_image_url(entity.image_url) || create_from(entity)
       end
 
       def self.all
         Database::ImageOrm.all.map { |db_image| rebuild_entity(db_image) }
       end
 
-      def self.create(image_obj)
-        raise 'Image Already Exists in DB' if find(image_obj)
-
+      def self.create_from(entity)
         db_image = Database::ImageOrm.create(
-          image_url: image_obj.image_url,
-          hash_summary: image_obj.hash_summary
+          image_url: entity.image_url,
+          hash_summary: entity.hash_summary
         )
-        image_obj.labels.each do |label|
-          this_label = Labels.find_or_create(label)
-          label = Database::LabelOrm.first(id: this_label)
-          db_image.add_label(label)
+
+        entity.labels.each do |label|
+          new_label = Labels.find_or_create(label)
+          db_label = Database::LabelOrm.first(id: new_label.id)
+          db_image.add_label(db_label)
         end
 
         rebuild_entity(db_image)
       end
 
-      def self.rebuild_entity(db_image)
-        return nil unless db_image
+      def self.rebuild_entity(db_record)
+        return nil unless db_record
 
-        these_labels = db_image.labels.map do |db_labels|
-          Labels.rebuild_entity(db_labels)
+        labels = db_record.labels.map do |db_label|
+          Labels.rebuild_entity(db_label)
         end
 
         Entity::Image.new(
-          id: db_image.id,
-          image_url: db_image.image_url,
-          hash_summary: db_image.hash_summary,
-          labels: these_labels
+          id: db_record.id,
+          image_url: db_record.image_url,
+          hash_summary: db_record.hash_summary,
+          labels: labels
         )
       end
     end
