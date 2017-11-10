@@ -59,13 +59,16 @@ namespace :db do
 
   desc 'Seeds the development database'
   task :seed do
-    Sequel::Seed.setup(:development)
+    puts "Seeding #{app.environment} database"
+    require_relative 'init.rb'
+    Sequel::Seed.setup(app.environment)
     Sequel.extension :seed
     Sequel::Seeder.apply(app.DB, 'infrastructure/database/seeds')
   end
 
   desc 'Drop all tables'
   task :drop do
+    puts "Dropping all tables from #{app.environment} database"
     require_relative 'config/environment.rb'
     # drop according to dependencies
     app.DB.drop_table :label_translations
