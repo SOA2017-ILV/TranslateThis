@@ -2,7 +2,7 @@
 
 module TranslateThis
   module Repository
-    # Repository for Image Entities
+    # Repository for Language Entities
     class Languages
       def self.find_id(id)
         db_record = Database::LanguageOrm.first(id: id)
@@ -19,7 +19,7 @@ module TranslateThis
       end
 
       def self.all
-        Database::LangugaOrm.all.map { |db_lang| rebuild_entity(db_lang) }
+        Database::LanguageOrm.all.map { |db_lang| rebuild_entity(db_lang) }
       end
 
       def self.create_from(entity)

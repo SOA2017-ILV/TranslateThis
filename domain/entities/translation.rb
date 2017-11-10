@@ -9,7 +9,7 @@ module TranslateThis
     class Translation < Dry::Struct
       attribute :id, Types::Int.optional
       attribute :translated_text, Types::Strict::String
-      attribute :language, Language
+      attribute :target_language, Language
       attribute :label, Label
     end
   end
