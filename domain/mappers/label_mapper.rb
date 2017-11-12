@@ -17,7 +17,7 @@ module TranslateThis
         end
       end
 
-      def self.build_entity(label_data)
+      def build_entity(label_data)
         DataMapper.new(label_data).build_entity
       end
 
@@ -29,6 +29,7 @@ module TranslateThis
 
         def build_entity
           TranslateThis::Entity::Label.new(
+            id: nil,
             label_text: description
           )
         end

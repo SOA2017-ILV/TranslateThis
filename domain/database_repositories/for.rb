@@ -6,8 +6,7 @@ module TranslateThis
       Entity::Image         => Images,
       Entity::Language      => Languages,
       Entity::Label         => Labels,
-      Entity::ImageLabel    => ImageLabels,
-      Entity::Translations  => Translations
+      Entity::Translation   => Translations
     }.freeze
   end
 end

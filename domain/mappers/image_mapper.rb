@@ -13,10 +13,10 @@ module TranslateThis
 
       def upload_image(image_path, hash_summary = '')
         image_data = @gateway.image_upload(image_path)
-        build_entity(image_data['responses']['data'], hash_summary)
+        build_entity(image_data['data'], hash_summary)
       end
 
-      def self.build_entity(image_data, hash_summary)
+      def build_entity(image_data, hash_summary)
         DataMapper.new(image_data, hash_summary).build_entity
       end
 
@@ -29,6 +29,7 @@ module TranslateThis
 
         def build_entity
           TranslateThis::Entity::Image.new(
+            id: nil,
             image_url: image_url,
             hash_summary: @hash_summary
           )

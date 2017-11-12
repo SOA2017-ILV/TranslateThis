@@ -20,8 +20,7 @@ module TranslateThis
       end
 
       def self.find_or_create(entity)
-        # TODO: Replace by find_hash_summary once function is implemented
-        find_image_url(entity.image_url) || create_from(entity)
+        find_hash_summary(entity.hash_summary) || create_from(entity)
       end
 
       def self.all

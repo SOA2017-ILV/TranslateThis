@@ -48,7 +48,7 @@ module TranslateThis
       private
 
       def image_request(image_path)
-        image = open(image_path).to_a.join
+        image = Base64.encode64(open(image_path).to_a.join)
         { image: image,
           album: @album_hash }
       end

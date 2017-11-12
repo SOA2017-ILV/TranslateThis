@@ -11,23 +11,26 @@ module TranslateThis
         @gateway = @gateway_class.new(@config.google_token)
       end
 
-      def load(query, target_lang)
-        translate_data = @gateway.translate_data(query, target_lang)
-        build_entity(translate_data)
+      def load(query, target_language)
+        translate_data = @gateway.translate_data(query, target_language)
+        build_entity(translate_data, target_language)
       end
 
-      def build_entity(translate_data)
-        DataMapper.new(translate_data).build_entity
+      def build_entity(translate_data, target_language)
+        DataMapper.new(translate_data, target_language).build_entity
       end
       # Data Mapper Entity Builder
       class DataMapper
-        def initialize(translate_data)
+        def initialize(translate_data, target_language)
           @translate_data = translate_data
+          @target_language = target_language
         end
 
         def build_entity
           TranslateThis::Entity::Translation.new(
-            translated_text: translated_text
+            id: nil,
+            translated_text: translated_text,
+            target_language: @target_language
           )
         end
 

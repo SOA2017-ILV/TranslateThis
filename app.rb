@@ -3,6 +3,7 @@
 require 'roda'
 require 'econfig'
 require 'rbnacl/libsodium'
+require 'base64'
 
 module TranslateThis
   # Web API
@@ -30,19 +31,25 @@ module TranslateThis
           routing.is 'v0.1' do
             # POST / api/v0.1
             routing.post do
-              # TODO: Hash image
-              # TODO: Check if hashed image is already on DB, if not, save
-              # TODO: Save image to DB
-              # TODO: Get labels from GoogleVision or from DB
-              # TODO: Check if label already has translation to target_lang
-              # TODO: Get translation from GoogleTranslation or DB and return
+              img_path = routing['img'][:tempfile]
+              img_64 = Base64.encode64(open(img_path).to_a.join)
+              hash_summary = RbNaCl::Hash.sha256(img_64)
+              img_mapper = TranslateThis::Imgur::ImageMapper.new(app.config)
+              img_entity = img_mapper.upload_image(img_path, hash_summary)
+              puts img_entity.class
+              stored_img = Repository::For[img_entity.class]
+                           .find_or_create(img_entity)
+
+            
+             # TODO: Get labels from GoogleVision or from DB (using stored_img.id)
+             # TODO: Check if label already has translation to target_lang
+             # TODO: Get translation from GoogleTranslation or DB and return
               label_mapper = TranslateThis::GoogleVision::LabelMapper
                              .new(app.config)
               trans_mapper = TranslateThis::GoogleTranslation::TranslationMapper
                              .new(app.config)
 
               labels = label_mapper.load_several(routing['img'][:tempfile])
-              hash = RbNaCl::Hash.SHA256(routing['img'][:tempfile])
               label = labels[0].description
               translate = trans_mapper.load(label, routing['target_lang'])
               message = "Your picture was recognized as \"#{label}\" in English"
