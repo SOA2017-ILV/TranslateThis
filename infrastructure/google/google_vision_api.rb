@@ -52,7 +52,7 @@ module TranslateThis
         content = Base64.encode64(open(image_path).to_a.join)
         requests = [
           { image: { content: content },
-            features: [{ type: 'LABEL_DETECTION' }] }
+            features: [{ type: 'SAFE_SEARCH_DETECTION' }] }
         ]
         { requests: requests }
       end

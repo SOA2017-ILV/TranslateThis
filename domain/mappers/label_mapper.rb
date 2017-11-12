@@ -12,9 +12,27 @@ module TranslateThis
 
       def load_several(image_url)
         labels_data = @gateway.labels_data(image_url)
+        safe_search_anot = labels_data['responses'][0]['safeSearchAnnotation']
+        raise(StandardError) unless safe_search(safe_search_anot)
         labels_data['responses'][0]['labelAnnotations'].map do |label_data|
-          build_entity(label_data)
+          build_entity(label_data) unless label_data['score'] < 0.75
         end
+      end
+
+      def safe_search(safe_search_annotation)
+        # Possibilities:
+        # "UNKNOWN", VERY_UNLIKELY", "UNLIKELY"
+        # "POSSIBLE", "LIKELY", or "VERY_LIKELY"
+        adult = safe_field(safe_search_annotation['adult'])
+        spoof = safe_field(safe_search_annotation['spoof'])
+        medical = safe_field(safe_search_annotation['medical'])
+        violence = safe_field(safe_search_annotation['violence'])
+
+        (adult || spoof || medical || violence)
+      end
+
+      def safe_field(field)
+        (field == 'VERY_UNLIKELY' || field == 'UNLIKELY')
       end
 
       def build_entity(label_data)

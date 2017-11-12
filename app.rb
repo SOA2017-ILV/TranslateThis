@@ -36,16 +36,18 @@ module TranslateThis
               hash_summary = RbNaCl::Hash.sha256(img_64)
               img_mapper = TranslateThis::Imgur::ImageMapper.new(app.config)
               img_entity = img_mapper.upload_image(img_path, hash_summary)
-              puts img_entity.class
               stored_img = Repository::For[img_entity.class]
                            .find_or_create(img_entity)
 
-            
+              
              # TODO: Get labels from GoogleVision or from DB (using stored_img.id)
              # TODO: Check if label already has translation to target_lang
-             # TODO: Get translation from GoogleTranslation or DB and return
+
               label_mapper = TranslateThis::GoogleVision::LabelMapper
                              .new(app.config)
+              label_entities = img_mapper.upload_image(img_path, hash_summary)
+
+              # TODO: Get translation from GoogleTranslation or DB and return
               trans_mapper = TranslateThis::GoogleTranslation::TranslationMapper
                              .new(app.config)
 
