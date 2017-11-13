@@ -55,3 +55,6 @@ config/secrets.yml
 
 # Ignore database files
 *.db
+
+# ignore bundle without production cases for heroku deployments
+.bundle/
