@@ -9,9 +9,6 @@ Sequel.migration do
       foreign_key :label_id, :labels
       primary_key [:image_id, :label_id]
       index [:image_id, :label_id]
-
-      DateTime :created_at
-      DateTime :updated_at
     end
   end
 end

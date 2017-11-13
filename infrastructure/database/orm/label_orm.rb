@@ -9,7 +9,7 @@ module TranslateThis
                    join_table: :images_labels,
                    left_key: :label_id, right_key: :image_id
 
-      many_to_one :language,
+      many_to_one :origin_language,
                   class: :'TranslateThis::Database::LanguageOrm'
 
       one_to_many :translations,

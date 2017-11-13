@@ -6,7 +6,7 @@ module TranslateThis
     class LanguageOrm < Sequel::Model(:languages)
       one_to_many :labels,
                   class: :'TranslateThis::Database::LabelOrm',
-                  key: :language_id
+                  key: :origin_language_id
 
       one_to_many :translations,
                   class: :'TranslateThis::Database::TranslationOrm',

@@ -9,8 +9,8 @@ module TranslateThis
         rebuild_entity(db_record)
       end
 
-      def find_or_create(entity)
-        find_language_code(entity) || create_from(entity)
+      def self.find_or_create(entity)
+        find_language_code(entity.code) || create_from(entity)
       end
 
       def self.find_language_code(language_code)

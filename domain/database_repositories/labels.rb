@@ -14,8 +14,8 @@ module TranslateThis
         rebuild_entity(db_record)
       end
 
-      def find_or_create(entity)
-        find_label_text(entity.label_text) || create_from(label_obj)
+      def self.find_or_create(entity)
+        find_label_text(entity.label_text) || create_from(entity)
       end
 
       def self.create_from(entity)
@@ -23,7 +23,7 @@ module TranslateThis
         db_language = Database::LanguageOrm.first(id: new_language.id)
 
         db_label = Database::LabelOrm.create(
-          language_id: db_language.id,
+          origin_language: db_language,
           label_text: entity.label_text
         )
         rebuild_entity(db_label)
@@ -35,11 +35,10 @@ module TranslateThis
 
       def self.rebuild_entity(db_record)
         return nil unless db_record
-
         Entity::Label.new(
           id: db_record.id,
-          language: db_record.label_text,
-          code: db_record.target_language
+          origin_language: Languages.rebuild_entity(db_record.origin_language),
+          label_text: db_record.label_text
         )
       end
     end

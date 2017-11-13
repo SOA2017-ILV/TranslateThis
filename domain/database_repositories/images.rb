@@ -27,6 +27,19 @@ module TranslateThis
         Database::ImageOrm.all.map { |db_image| rebuild_entity(db_image) }
       end
 
+      def self.add_labels(entity, labels_entities)
+        return nil unless entity
+
+        db_image = Database::ImageOrm.first(id: entity.id)
+
+        labels_entities.each do |label_entity|
+          db_label = Database::LabelOrm.first(id: label_entity.id)
+          db_image.add_label(db_label)
+        end
+
+        rebuild_entity(db_image)
+      end
+
       def self.create_from(entity)
         db_image = Database::ImageOrm.create(
           image_url: entity.image_url,
