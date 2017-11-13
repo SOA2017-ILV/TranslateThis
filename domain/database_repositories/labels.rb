@@ -29,6 +29,17 @@ module TranslateThis
         rebuild_entity(db_label)
       end
 
+      def self.add_translation(entity, translation)
+        return nil unless entity
+
+        db_label = Database::LabelOrm.first(id: entity.id)
+
+        db_translation = Database::TranslationOrm.first(id: translation.id)
+        db_label.add_translation(db_translation)
+
+        rebuild_entity(db_label)
+      end
+
       def self.all
         Database::LabelOrm.all.map { |db_label| rebuild_entity(db_label) }
       end

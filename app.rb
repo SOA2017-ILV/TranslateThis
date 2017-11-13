@@ -44,11 +44,11 @@ module TranslateThis
                              .find_or_create(img_entity)
               end
 
+              label_repository = Repository::For[TranslateThis::Entity::Label]
               if stored_img.labels.size.zero?
                 label_mapper = TranslateThis::GoogleVision::LabelMapper
                                .new(app.config)
                 label_entities = label_mapper.load_several(img_path)
-                label_repository = Repository::For[TranslateThis::Entity::Label]
                 stored_labels = []
                 label_entities.map do |label_entity|
                   stored_label = label_repository.find_or_create(label_entity)
@@ -58,22 +58,38 @@ module TranslateThis
                 img_repository.add_labels(stored_img, stored_labels)
               end
 
-              # TODO: Check if label already has translation to target_lang
+              target_lang = routing['target_lang']
+              lang_entity = Repository::For[TranslateThis::Entity::Language]
+                            .find_language_code(target_lang)
+              trans_entity_class = TranslateThis::Entity::Translation
+              trans_repository = Repository::For[trans_entity_class]
 
-              # TODO: Get translation from GoogleTranslation or DB and return
-              # trans_mapper = TranslateThis::GoogleTranslation::TranslationMapper
-              #                .new(app.config)
-              #
-              # labels = label_mapper.load_several(routing['img'][:tempfile])
-              # label = labels[0].description
-              # translate = trans_mapper.load(label, routing['target_lang'])
-              # message = "Your picture was recognized as \"#{label}\" in English"
-              # message += ". The translation to #{routing['target_lang']} is "
-              # message += "\"#{translate.translated_text}\""
-              # message += 'I also made a Hash for you, it is '
-              # message += "\"#{hash}\""
-              # { 'message' => message }
-              { 'message' => 'message' }
+              trans_mapper = TranslateThis::GoogleTranslation::TranslationMapper
+                             .new(app.config)
+
+              translations_message = ''
+              stored_img.labels.map do |label_entity|
+                # Search by label and by language
+                trans_db = trans_repository
+                           .find_label_language(
+                             label_entity, lang_entity
+                           )
+                if trans_db.nil?
+                  translation = trans_mapper.load(label_entity,
+                                                  target_lang)
+                  trans_db = trans_repository.find_or_create(translation)
+                  label_repository.add_translation(label_entity, trans_db)
+                end
+
+                translations_message += "#{trans_db.label.label_text}: "
+                translations_message += "#{trans_db.translated_text}\n"
+              end
+
+              message = 'Your picture was recognized in English and translated '
+              message += "to #{target_lang} with the following results:\n"
+              message += translations_message
+
+              { 'message' => message }
             end
           end
         rescue StandardError
