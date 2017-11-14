@@ -6,7 +6,7 @@ Sequel.migration do
   change do
     create_table(:labels) do
       primary_key :id
-      foreign_key :language_id, :languages
+      foreign_key :origin_language_id, :languages
 
       String :label_text
       DateTime :created_at

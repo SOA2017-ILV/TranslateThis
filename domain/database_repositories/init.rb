@@ -1,5 +1,7 @@
-# frozen_string_literal: false
+# frozen_string_literal: true
 
-# Dir.glob("#{File.dirname(__FILE__)}/*.rb").each do |file|
-#   require file
-# end
+require_relative 'images.rb'
+require_relative 'languages.rb'
+require_relative 'labels.rb'
+require_relative 'translations.rb'
+require_relative 'for.rb'

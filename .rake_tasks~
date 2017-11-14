@@ -1,0 +1,8 @@
+console
+db:drop
+db:migrate
+db:reset
+db:wipe
+quality:all
+rmvcr
+spec

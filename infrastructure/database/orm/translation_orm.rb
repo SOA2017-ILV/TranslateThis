@@ -7,7 +7,7 @@ module TranslateThis
       many_to_one :label,
                   class: :'TranslateThis::Database::LabelOrm'
 
-      many_to_one :language,
+      many_to_one :target_language,
                   class: :'TranslateThis::Database::LanguageOrm'
 
       plugin :timestamps, update_on_create: true

@@ -8,11 +8,13 @@ gem 'http'
 # Web app related
 gem 'econfig'
 gem 'puma'
+gem 'rbnacl-libsodium'
 gem 'roda'
 
 # Database related
 gem 'hirb'
 gem 'sequel'
+gem 'sequel-seed'
 
 # Data gems
 gem 'dry-struct'
