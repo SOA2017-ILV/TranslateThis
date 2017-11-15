@@ -8,6 +8,7 @@ gem 'http'
 # Web app related
 gem 'econfig'
 gem 'puma'
+gem 'rake'
 gem 'rbnacl-libsodium'
 gem 'roda'
 
