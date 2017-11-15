@@ -7,6 +7,7 @@ gem 'http'
 
 # Web app related
 gem 'econfig'
+gem 'pry'
 gem 'puma'
 gem 'rake'
 gem 'rbnacl-libsodium'
@@ -25,7 +26,6 @@ group :test do
   gem 'minitest'
   gem 'minitest-rg'
   gem 'rack-test'
-  gem 'rake'
   gem 'simplecov'
   gem 'vcr'
   gem 'webmock'
@@ -37,8 +37,11 @@ group :development, :test do
 
   gem 'database_cleaner'
   gem 'flog'
-  gem 'pry'
   gem 'reek'
   gem 'rerun'
   gem 'rubocop'
+end
+
+group :production do
+  gem 'pg'
 end
