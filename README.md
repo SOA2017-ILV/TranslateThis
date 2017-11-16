@@ -1,8 +1,14 @@
 # TranslateThis
 
-[ ![Codeship Status for SOA2017-ILV/TranslateThis]
-(https://app.codeship.com/projects/98624d90-9c6d-0135-6d81-1a351be8063b/status?branch=master)]
-(https://app.codeship.com/projects/252945)
+[ ![Codeship Status for SOA2017-ILV/TranslateThis](https://app.codeship.com/projects/98624d90-9c6d-0135-6d81-1a351be8063b/status?branch=master)](https://app.codeship.com/projects/252945)
+or
+https://app.codeship.com/projects/98624d90-9c6d-0135-6d81-1a351be8063b/status?branch=master
+
+or
+"!https://app.codeship.com/projects/98624d90-9c6d-0135-6d81-1a351be8063b/status?branch=master!":https://app.codeship.com/projects/252945
+
+or
+{<img src="https://app.codeship.com/projects/98624d90-9c6d-0135-6d81-1a351be8063b/status?branch=master" alt="Status?branch=master" />}[https://app.codeship.com/projects/252945]
 
 SOA 2017 Project - Get the object on an image in the language you want
 
