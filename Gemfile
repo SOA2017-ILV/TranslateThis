@@ -16,6 +16,7 @@ gem 'roda'
 
 # Database related
 gem 'hirb'
+gem 'pg'
 gem 'sequel'
 gem 'sequel-seed'
 
@@ -41,16 +42,15 @@ group :test do
 end
 
 group :development, :test do
-  # requires libsqlite3-dev
-  gem 'sqlite3'
-
   gem 'database_cleaner'
   gem 'flog'
   gem 'reek'
   gem 'rerun'
   gem 'rubocop'
+  # requires libsqlite3-dev
+  # gem 'sqlite3'
 end
 
-group :production do
-  gem 'pg'
-end
+# group :production do
+#   gem 'pg'
+# end

@@ -22,7 +22,7 @@ describe 'Tests TranslateThis library' do
       _(last_response.status).must_equal 200
     end
     it 'SAD: should raise exception on POST without paremeters' do
-      post API_VER.to_s
+      post "#{API_VER.to_s}/translate"
       _(last_response.status).must_equal 404
       body = JSON.parse last_response.body
       _(body.keys).must_include 'error'
