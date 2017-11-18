@@ -16,9 +16,10 @@ module TranslateThis
 
         img_path = @routing['img'][:tempfile]
         img64 = Base64.encode64(open(img_path).to_a.join)
-        hash_summary = RbNaCl::Hash.sha256(img64)
+        hash_summary = RbNaCl::Hash.sha256(img64).encode('UTF-8', 'ISO-8859-15')
         stored_img = Repository::For[TranslateThis::Entity::Image]
                      .find_hash_summary(hash_summary)
+
         if stored_img.nil?
           img_mapper = TranslateThis::Imgur::ImageMapper.new(@config)
           img_entity = img_mapper.upload_image(img_path, hash_summary)
@@ -73,10 +74,12 @@ module TranslateThis
           end
 
           message = 'Your picture was recognized in English and translated '
-          message += "to #{target_lang} with the following results:\n"
+          message += "to #{lang_entity.language} with the following results:\n"
           message += translations_message
         end
-
+        puts '123'
+        puts message
+        puts '456'
         { 'message' => message }
       end
     end
