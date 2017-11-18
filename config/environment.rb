@@ -20,7 +20,9 @@ module TranslateThis
     end
 
     configure :development, :test do
-      ENV['DATABASE_URL'] = 'sqlite://' + config.db_filename
+      # ENV['DATABASE_URL'] = 'sqlite://' + config.db_filename
+      # 'postgres://user:password@localhost/' + config.db_name
+      ENV['DATABASE_URL'] = 'postgres://localhost/' + config.db_name
     end
 
     configure :production do
@@ -29,8 +31,11 @@ module TranslateThis
 
     configure do
       require 'sequel'
-      DB = Sequel.connect(ENV['DATABASE_URL'])
-
+      begin
+        DB = Sequel.connect(ENV['DATABASE_URL'])
+      rescue Sequel::DatabaseConnectionError
+        puts 'DB was not found'
+      end
       def self.DB
         DB
       end

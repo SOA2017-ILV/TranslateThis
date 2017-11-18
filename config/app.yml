@@ -1,6 +1,12 @@
 ---
 development:
-  db_filename: infrastructure/database/dev.db
+  # sqlite
+  # db_filename: infrastructure/database/dev.db
+  #PostgreSQL
+  db_name: translate_this_dev
 
 test:
-  db_filename: infrastructure/database/test.db
+  # sqlite
+  # db_filename: infrastructure/database/test.db
+  #PostgreSQL
+  db_name: translate_this_test

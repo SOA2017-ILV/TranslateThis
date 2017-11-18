@@ -51,6 +51,15 @@ namespace :db do
   Sequel.extension :migration
   app = TranslateThis::Api
 
+  desc 'Create PostgreSQL DB'
+  task :create_pg do
+    puts "Creating PostgreSQL #{app.environment} database"
+    # 'postgres://user:password@localhost/' + app.config.db_name
+    Sequel.connect('postgres://localhost/') do |db|
+      db.execute "CREATE DATABASE #{app.config.db_name};"
+    end
+  end
+
   desc 'Run migrations'
   task :migrate do
     puts "Migrating #{app.environment} database to latest"
@@ -82,8 +91,8 @@ namespace :db do
   desc 'Reset all database tables'
   task reset: [:drop, :migrate, :seed]
 
-  desc 'Delete dev or test database file'
-  task :wipe do
+  desc 'Delete dev or test database SQLite file'
+  task :wipe_sqlite do
     if app.environment == :production
       puts 'Cannot wipe production database!'
       return
@@ -91,5 +100,26 @@ namespace :db do
 
     FileUtils.rm(app.config.db_filename)
     puts "Deleted #{app.config.db_filename}"
+  end
+
+  task :wipe_pg do
+    puts "Deleting PostgreSQL DB #{app.config.db_name}"
+    if app.environment == :production
+      puts 'Cannot wipe production database!'
+      return
+    end
+    begin
+      # 'postgres://user:password@localhost/' + app.config.db_name
+      Sequel.connect('postgres://localhost/') do |db|
+        db.execute "REVOKE CONNECT ON DATABASE #{app.config.db_name} FROM public;"
+        db_terminate = 'SELECT pg_terminate_backend(pg_stat_activity.pid) '
+        db_terminate += 'FROM pg_stat_activity WHERE '
+        db_terminate += "pg_stat_activity.datname = '#{app.config.db_name}';"
+        db.execute db_terminate
+        db.execute "DROP DATABASE IF EXISTS #{app.config.db_name};"
+      end
+    rescue Sequel::DatabaseError
+      puts 'DB does not exist, cannot wipe'
+    end
   end
 end

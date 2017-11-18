@@ -12,6 +12,14 @@ require 'vcr'
 require 'webmock'
 require 'ostruct'
 
+load 'rakefile'
+Rake::Task['db:wipe_pg'].invoke
+Rake::Task['db:create_pg'].invoke
+# For some weird reason Rake::Task isn't working here..
+# Rake::Task['db:migrate'].invoke
+sh "rake db:migrate"
+Rake::Task['db:seed'].invoke
+
 require_relative 'test_load_all'
 
 CONFIG = YAML.safe_load(File.read('./config/secrets.yml'))
