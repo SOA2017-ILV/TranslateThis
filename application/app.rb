@@ -58,9 +58,13 @@ module TranslateThis
           # /api/v0.1/translate branch
           routing.on 'translate' do
             routing.post do
-              image_translation = TranslateThis::Entity::ImageTranslation
-                                  .new(app.config, routing)
-              image_translation.translate_image
+              begin
+                image_translation = TranslateThis::Entity::ImageTranslation
+                                    .new(app.config, routing)
+                image_translation.translate_image
+              rescue NoMethodError
+                routing.halt(404, error: 'Error on request. Contact admins')
+              end
             end
           end
         end

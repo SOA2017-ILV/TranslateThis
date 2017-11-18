@@ -77,9 +77,7 @@ module TranslateThis
           message += "to #{lang_entity.language} with the following results:\n"
           message += translations_message
         end
-        puts '123'
-        puts message
-        puts '456'
+
         { 'message' => message }
       end
     end
