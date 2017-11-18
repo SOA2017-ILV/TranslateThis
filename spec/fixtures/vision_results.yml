@@ -12,21 +12,3 @@ labels:
 - mid: "/m/0kpmf"
   description: dog breed
   score: 0.8698739
-- mid: "/m/01c7cq"
-  description: grassland
-  score: 0.72486943
-- mid: "/m/025st_8"
-  description: meadow
-  score: 0.6538265
-- mid: "/m/05mqq3"
-  description: snout
-  score: 0.64834446
-- mid: "/m/02wbgd"
-  description: english cocker spaniel
-  score: 0.6269684
-- mid: "/m/02kysw"
-  description: spaniel
-  score: 0.62650734
-- mid: "/m/01gd91"
-  description: pasture
-  score: 0.6250897

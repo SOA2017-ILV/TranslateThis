@@ -1,7 +1,5 @@
 # frozen_string_literal: false
 
-require_relative 'label.rb'
-
 module TranslateThis
   module Entity
     # Translates Images to labels
