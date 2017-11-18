@@ -16,9 +16,7 @@ module TranslateThis
                       .find_language_code(origin_language)
         raise(StandardError) if stored_lang.nil?
         labels_data = @gateway.labels_data(image_url)
-        safe_search_anot = labels_data['responses'][0]['safeSearchAnnotation']
-        raise(StandardError) unless safe_search(safe_search_anot)
-        map_labels(labels_data['responses'][1]['labelAnnotations'], stored_lang)
+        map_labels(labels_data['responses'][0]['labelAnnotations'], stored_lang)
       end
 
       def map_labels(label_annotations, stored_lang)
@@ -28,22 +26,6 @@ module TranslateThis
           labels.push(build_entity(label_data, stored_lang)) unless not_passed
         end
         labels
-      end
-
-      def safe_search(safe_search_annotation)
-        # Possibilities:
-        # "UNKNOWN", VERY_UNLIKELY", "UNLIKELY"
-        # "POSSIBLE", "LIKELY", or "VERY_LIKELY"
-        adult = safe_field(safe_search_annotation['adult'])
-        spoof = safe_field(safe_search_annotation['spoof'])
-        medical = safe_field(safe_search_annotation['medical'])
-        violence = safe_field(safe_search_annotation['violence'])
-
-        (adult || spoof || medical || violence)
-      end
-
-      def safe_field(field)
-        (field == 'VERY_UNLIKELY' || field == 'UNLIKELY')
       end
 
       def build_entity(label_data, stored_lang)

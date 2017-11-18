@@ -39,7 +39,12 @@ module TranslateThis
 
       def labels_data(image_url)
         labels_req_url = Api.vision_api_path('images:annotate', @api_token)
-        call_vision_url(labels_req_url, image_url).parse
+        call_vision_url(labels_req_url, image_request(image_url)).parse
+      end
+
+      def safe_data(image_url)
+        labels_req_url = Api.vision_api_path('images:annotate', @api_token)
+        call_vision_url(labels_req_url, safe_request(image_url)).parse
       end
 
       def self.vision_api_path(path, api_token)
@@ -48,19 +53,28 @@ module TranslateThis
 
       private
 
-      def image_request(image_path)
-        content = Base64.encode64(open(image_path).to_a.join)
+      def safe_request(image_path)
         requests = [
-          { image: { content: content },
-            features: [{ type: 'SAFE_SEARCH_DETECTION' }] },
-          { image: { content: content },
+          { image: { content: img_encode64(image_path) },
+            features: [{ type: 'SAFE_SEARCH_DETECTION' }] }
+        ]
+        { requests: requests }
+      end
+
+      def image_request(image_path)
+        requests = [
+          { image: { content: img_encode64(image_path) },
             features: [{ type: 'LABEL_DETECTION' }] }
         ]
         { requests: requests }
       end
 
-      def call_vision_url(url, image_url)
-        result = HTTP.post(url, json: image_request(image_url))
+      def img_encode64(image_path)
+        Base64.encode64(open(image_path).to_a.join)
+      end
+
+      def call_vision_url(url, json_request)
+        result = HTTP.post(url, json: json_request)
         Response.new(result).response_or_error
       end
     end
