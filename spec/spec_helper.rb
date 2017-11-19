@@ -22,7 +22,6 @@ Rake::Task['db:seed'].invoke
 
 require_relative 'test_load_all'
 
-CONFIG = YAML.safe_load(File.read('./config/secrets.yml'))
 IMAGE = 'spec/fixtures/demo-image.jpg'.freeze
 CORRECT_VI = YAML.safe_load(File.read('spec/fixtures/vision_results.yml'))
 CORRECT_TR = YAML.safe_load(File.read('spec/fixtures/translation_results.yml'))
