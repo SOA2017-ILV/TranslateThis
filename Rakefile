@@ -98,8 +98,8 @@ namespace :db do
       return
     end
 
-    FileUtils.rm(app.config.db_filename)
-    puts "Deleted #{app.config.db_filename}"
+    FileUtils.rm(app.config.db_name)
+    puts "Deleted #{app.config.db_name}"
   end
 
   task :wipe_pg do
