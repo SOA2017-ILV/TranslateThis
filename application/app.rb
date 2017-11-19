@@ -1,20 +1,14 @@
 # frozen_string_literal: true
 
 require 'roda'
-require 'econfig'
 require 'rbnacl/libsodium'
 require 'base64'
 
 module TranslateThis
   # Web API
   class Api < Roda
-    plugin :environments
     plugin :json
     plugin :halt
-
-    extend Econfig::Shortcut
-    Econfig.env = environment.to_s
-    Econfig.root = '.'
 
     route do |routing|
       app = Api
