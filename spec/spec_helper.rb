@@ -12,7 +12,7 @@ require 'vcr'
 require 'webmock'
 require 'ostruct'
 
-load 'rakefile'
+load 'Rakefile'
 Rake::Task['db:wipe_pg'].invoke
 Rake::Task['db:create_pg'].invoke
 # For some weird reason Rake::Task isn't working here..
