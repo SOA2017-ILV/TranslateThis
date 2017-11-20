@@ -18,9 +18,9 @@ Rake::Task['db:create_pg'].invoke
 # For some weird reason Rake::Task isn't working here..
 # Rake::Task['db:migrate'].invoke
 sh "rake db:migrate"
-Rake::Task['db:seed'].invoke
 
 require_relative 'test_load_all'
+Rake::Task['db:seed'].invoke
 
 IMAGE = 'spec/fixtures/demo-image.jpg'.freeze
 CORRECT_VI = YAML.safe_load(File.read('spec/fixtures/vision_results.yml'))
