@@ -2,7 +2,7 @@
 
 require 'sequel/extensions/seed'
 
-Sequel.seed(:development, :test) do
+Sequel.seed(:development, :test, :production) do
   def run
     puts 'Seeding languages'
     create_languages

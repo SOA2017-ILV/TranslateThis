@@ -10,3 +10,4 @@ test:
   # db_filename: infrastructure/database/test.db
   #PostgreSQL
   db_name: translate_this_test
+  

@@ -22,7 +22,7 @@ module TranslateThis
     configure :development, :test do
       # ENV['DATABASE_URL'] = 'sqlite://' + config.db_filename
       # 'postgres://user:password@localhost/' + config.db_name
-      ENV['DATABASE_URL'] = 'postgres://localhost/' + config.db_name
+      ENV['DATABASE_URL'] = "postgres://#{config.user_pass_pg}localhost/" + config.db_name
     end
 
     configure :production do

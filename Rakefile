@@ -54,8 +54,12 @@ namespace :db do
   desc 'Create PostgreSQL DB'
   task :create_pg do
     puts "Creating PostgreSQL #{app.environment} database"
+    db_url = "postgres://#{app.config.user_pass_pg}localhost"
+    if app.environment == :production
+      db_url = "postgres://#{app.config.user_pass_pg}#{app.config.DATABASE_URL}"
+    end
     # 'postgres://user:password@localhost/' + app.config.db_name
-    Sequel.connect('postgres://localhost/') do |db|
+    Sequel.connect(db_url) do |db|
       db.execute "CREATE DATABASE #{app.config.db_name};"
     end
   end
@@ -110,7 +114,7 @@ namespace :db do
     end
     begin
       # 'postgres://user:password@localhost/' + app.config.db_name
-      Sequel.connect('postgres://localhost/') do |db|
+      Sequel.connect("postgres://#{app.config.user_pass_pg}#{app.config.DATABASE_URL}") do |db|
         db.execute "REVOKE CONNECT ON DATABASE #{app.config.db_name} FROM public;"
         db_terminate = 'SELECT pg_terminate_backend(pg_stat_activity.pid) '
         db_terminate += 'FROM pg_stat_activity WHERE '
