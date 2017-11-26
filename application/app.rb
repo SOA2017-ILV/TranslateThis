@@ -61,6 +61,16 @@ module TranslateThis
               end
             end
           end
+
+          # /api/v0.1/language branch
+          routing.on 'language' do
+            routing.is do
+              routing.get do
+                languages = Repository::For[Entity::Language].all
+                LanguagesRepresenter.new(Languages.new(languages)).to_json
+              end
+            end
+          end
         end
       end
     end

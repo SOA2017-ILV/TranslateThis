@@ -43,6 +43,15 @@ namespace :quality do
   end
 end
 
+namespace :run do
+  task :dev do
+    sh 'rerun -c "rackup -p 9292"'
+  end
+  task :app_test do
+    sh 'RACK_ENV=test rackup -p 9292'
+  end
+end
+
 namespace :db do
   require_relative 'config/environment.rb'
   require 'sequel'
