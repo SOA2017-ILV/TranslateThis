@@ -10,7 +10,7 @@ module TranslateThis
       end
 
       def translate_image
-        message = ''
+        resp = []
 
         img_path = @routing['img'][:tempfile]
         img64 = Base64.encode64(open(img_path).to_a.join)
@@ -25,8 +25,8 @@ module TranslateThis
             stored_img = Repository::For[img_entity.class]
                          .find_or_create(img_entity)
           else
-            message += 'Your image was detected as unsafe. '
-            message += 'Please upload a safe image.'
+            resp = 'Your image was detected as unsafe. '
+            resp += 'Please upload a safe image.'
           end
         end
 
@@ -53,7 +53,7 @@ module TranslateThis
 
           trans_mapper = TranslateThis::GoogleTranslation::TranslationMapper
                          .new(@config)
-          translations_message = ''
+
           stored_img.labels.map do |label_entity|
             # Search by label and by language
             trans_db = trans_repository
@@ -67,16 +67,17 @@ module TranslateThis
               label_repository.add_translation(label_entity, trans_db)
             end
 
-            translations_message += "#{trans_db.label.label_text}: "
-            translations_message += "#{trans_db.translated_text}\n"
+            translation_hash = {}
+            translation_hash['label_text'] = trans_db.label.label_text
+            translation_hash['translated_text'] = trans_db.translated_text
+            translation_hash['target_lang_code'] = target_lang
+            translation_hash['target_lang'] = lang_entity.language
+            translation_hash['img_link'] = stored_img.image_url
+            resp.push(translation_hash)
           end
-
-          message = 'Your picture was recognized in English and translated '
-          message += "to #{lang_entity.language} with the following results:\n"
-          message += translations_message
         end
 
-        { 'message' => message }
+        resp
       end
     end
   end
