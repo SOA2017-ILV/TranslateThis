@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
 module TranslateThis
-    # Representer for HTTP response information
-    # Usage:
-    #  result = Result.new(:not_found, 'resource not found')
-    #   HttpResponseRepresenter.new(result).to_json
-    #   HttpResponseRepresenter.new(result).http_code
+  # Representer for HTTP response information
+  # Usage:
+  # result = Result.new(:not_found, 'resource not found')
+  # HttpResponseRepresenter.new(result).to_json
+  # HttpResponseRepresenter.new(result).http_code
   class HttpResponseRepresenter < Roar::Decorator
     include Roar::JSON
 

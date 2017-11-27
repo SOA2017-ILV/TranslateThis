@@ -1,5 +1,5 @@
 # frozen_string_literal: false
-
+# TODO: Delete this file and all uses
 module TranslateThis
   module Entity
     # Translates Images to labels
@@ -10,7 +10,7 @@ module TranslateThis
       end
 
       def translate_image
-        resp = []
+        result = nil
 
         img_path = @routing['img'][:tempfile]
         img64 = Base64.encode64(open(img_path).to_a.join)
@@ -25,11 +25,16 @@ module TranslateThis
             stored_img = Repository::For[img_entity.class]
                          .find_or_create(img_entity)
           else
-            resp = 'Your image was detected as unsafe. '
-            resp += 'Please upload a safe image.'
+            msg = 'Your image was detected as unsafe. '
+            msg += 'Please upload a safe image.'
+            # resp['error'] = msg
+
+            result = Result.new(:bad_request, msg)
           end
         end
 
+        # translations = []
+        translation_results = []
         if stored_img
           label_repository = Repository::For[TranslateThis::Entity::Label]
           if stored_img.labels.size.zero?
@@ -67,17 +72,33 @@ module TranslateThis
               label_repository.add_translation(label_entity, trans_db)
             end
 
-            translation_hash = {}
-            translation_hash['label_text'] = trans_db.label.label_text
-            translation_hash['translated_text'] = trans_db.translated_text
-            translation_hash['target_lang_code'] = target_lang
-            translation_hash['target_lang'] = lang_entity.language
-            translation_hash['img_link'] = stored_img.image_url
-            resp.push(translation_hash)
+            # translation_hash = {}
+            # translation_hash['label_text'] = trans_db.label.label_text
+            # translation_hash['translated_text'] = trans_db.translated_text
+            # translation_hash['target_lang_code'] = target_lang
+            # translation_hash['target_lang'] = lang_entity.language
+            # translation_hash['img_link'] = stored_img.image_url
+            # translations.push(translation_hash)
+
+            trans_result= TranslationResult.new(trans_db.label.label_text,
+                                                trans_db.translated_text,
+                                                target_lang,
+                                                lang_entity.language,
+                                                stored_img.image_url)
+            translation_results.push(trans_result)
           end
+
+          translations_json = TranslationsRepresenter
+                              .new(Translations.new(translation_results))
+                              .to_json
+          result = Result.new(:ok, translations_json)
         end
 
-        resp
+
+        # resp['translations'] = translations
+        # resp
+
+        HttpResponseRepresenter.new(result).to_json
       end
     end
   end

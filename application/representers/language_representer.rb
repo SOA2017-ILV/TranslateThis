@@ -6,7 +6,7 @@ module TranslateThis
   class LanguageRepresenter < Roar::Decorator
     include Roar::JSON
 
-    property :language
+    property :language, as: :name
     property :code
   end
 end

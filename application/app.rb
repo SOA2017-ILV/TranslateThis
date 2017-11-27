@@ -53,9 +53,14 @@ module TranslateThis
           routing.on 'translate' do
             routing.post do
               begin
-                image_translation = TranslateThis::Entity::ImageTranslation
-                                    .new(app.config, routing)
-                image_translation.translate_image
+                service_result = TranslateImage.new.call(
+                  config: app.config,
+                  routing: routing
+                )
+
+                http_response = HttpResponseRepresenter
+                                .new(service_result.value)
+                http_response.to_json
               rescue NoMethodError
                 routing.halt(404, error: 'Error on request. Contact admins')
               end
@@ -67,7 +72,14 @@ module TranslateThis
             routing.is do
               routing.get do
                 languages = Repository::For[Entity::Language].all
-                LanguagesRepresenter.new(Languages.new(languages)).to_json
+                languages_json = LanguagesRepresenter
+                                 .new(Languages.new(languages)).to_json
+                lang_result = Result.new(:ok, languages_json)
+                HttpResponseRepresenter.new(lang_result).to_json
+                # {
+                  # success: 1,
+                  # languages: languages_json
+                # }
               end
             end
           end
