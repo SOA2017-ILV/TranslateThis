@@ -11,7 +11,6 @@ module TranslateThis
       end
 
       def check_labels
-        labels = nil
         if @img.labels.size.zero?
           label_mapper = TranslateThis::GoogleVision::LabelMapper
                          .new(@config)
@@ -23,13 +22,10 @@ module TranslateThis
             stored_label = label_repository.find_or_create(label_entity)
             stored_labels.push(stored_label)
           end
-          img_repository = Repository::For[stored_img.class]
-          stored_img = img_repository.add_labels(stored_img, stored_labels)
-          labels = stored_img.labels
-        else
-          labels = @img.labels
+          img_repository = Repository::For[@img.class]
+          @img = img_repository.add_labels(@img, stored_labels)
         end
-        labels
+        @img
       end
     end
   end

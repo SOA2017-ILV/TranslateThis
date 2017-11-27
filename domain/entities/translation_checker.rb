@@ -20,6 +20,7 @@ module TranslateThis
 
         trans_mapper = TranslateThis::GoogleTranslation::TranslationMapper
                        .new(@config)
+        label_repository = Repository::For[TranslateThis::Entity::Label]
         @img.labels.map do |label_entity|
           trans_db = trans_repository
                      .find_label_language(

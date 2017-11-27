@@ -28,11 +28,11 @@ module TranslateThis
       label_checker = TranslateThis::Entity::LabelChecker.new(input[:config],
                                                               input[:routing],
                                                               input[:img])
-      labels = label_checker.check_labels
+      stored_img = label_checker.check_labels
 
-      if labels
+      if stored_img.labels
         Right(config: input[:config], routing: input[:routing],
-              img: input[:img])
+              img: stored_img)
       else
         Left(Result.new(:bad_request, 'Error getting labels for image'))
       end

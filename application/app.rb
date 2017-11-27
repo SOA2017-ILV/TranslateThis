@@ -60,6 +60,7 @@ module TranslateThis
 
                 http_response = HttpResponseRepresenter
                                 .new(service_result.value)
+                response.status = http_response.http_code
                 http_response.to_json
               rescue NoMethodError
                 routing.halt(404, error: 'Error on request. Contact admins')
@@ -75,11 +76,9 @@ module TranslateThis
                 languages_json = LanguagesRepresenter
                                  .new(Languages.new(languages)).to_json
                 lang_result = Result.new(:ok, languages_json)
-                HttpResponseRepresenter.new(lang_result).to_json
-                # {
-                  # success: 1,
-                  # languages: languages_json
-                # }
+                http_response = HttpResponseRepresenter.new(lang_result)
+                response.status = http_response.http_code
+                http_response.to_json
               end
             end
           end
