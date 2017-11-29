@@ -29,8 +29,11 @@ module TranslateThis
                        label_entity, lang_entity
                      )
           if trans_db.nil?
-            create_translations_concurently(label_entity, trans_mapper,
-                                            trans_repository, label_repository)
+            Concurrent::Promise.execute do
+              translation = trans_mapper.load(label_entity, target_lang)
+              trans_db = trans_repository.find_or_create(translation)
+              label_repository.add_translation(label_entity, trans_db)
+            end
           end
           trans_result = TranslationResult.new(trans_db.label.label_text,
                                                trans_db.translated_text,
@@ -40,15 +43,6 @@ module TranslateThis
           translations.push(trans_result)
         end
         translations
-      end
-
-      def create_translations_concurently(label_entity, trans_mapper,
-                                          trans_repository, label_repository)
-        Concurrent::Promise.execute do
-          translation = trans_mapper.load(label_entity, target_lang)
-          trans_db = trans_repository.find_or_create(translation)
-          label_repository.add_translation(label_entity, trans_db)
-        end
       end
     end
   end
