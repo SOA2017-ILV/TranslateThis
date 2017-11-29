@@ -46,8 +46,7 @@ module TranslateThis
       translations = translation_checker.check_translations
       if !translations.size.zero?
         translations_json = TranslationsRepresenter
-                            .new(Translations.new(translations))
-                            .to_json
+                            .new(Translations.new(translations)).to_json
         Right(Result.new(:ok, translations_json))
       else
         Left(Result.new(:bad_request, 'Error getting translations for labels'))

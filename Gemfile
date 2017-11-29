@@ -7,6 +7,7 @@ ruby '2.4.2'
 gem 'http'
 
 # Web app related
+gem 'concurrent-ruby'
 gem 'econfig'
 gem 'pry'
 gem 'puma'

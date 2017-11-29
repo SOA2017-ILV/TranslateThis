@@ -68,6 +68,24 @@ module TranslateThis
             end
           end
 
+          routing.on 'translate2' do
+            routing.post do
+              begin
+                service_result = TranslateImageConcurrent.new.call(
+                  config: app.config,
+                  routing: routing
+                )
+
+                http_response = HttpResponseRepresenter
+                                .new(service_result.value)
+                response.status = http_response.http_code
+                http_response.to_json
+              rescue NoMethodError
+                routing.halt(404, error: 'Error on request. Contact admins')
+              end
+            end
+          end
+
           # /api/v0.1/language branch
           routing.on 'language' do
             routing.is do

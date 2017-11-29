@@ -169,6 +169,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  concurrent-ruby
   database_cleaner
   dry-monads
   dry-struct
