@@ -1,0 +1,13 @@
+---
+images:
+- location: "spec/fixtures/images/dog1.jpg"
+- location: "spec/fixtures/images/dog2.jpg"
+- location: "spec/fixtures/images/dog3.jpg"
+- location: "spec/fixtures/images/dog4.jpg"
+- location: "spec/fixtures/images/dog5.jpg"
+- location: "spec/fixtures/images/dog6.jpg"
+- location: "spec/fixtures/images/dog7.jpg"
+- location: "spec/fixtures/images/dog8.jpg"
+- location: "spec/fixtures/images/dog9.jpg"
+- location: "spec/fixtures/images/dog10.jpg"
+

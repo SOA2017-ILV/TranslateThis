@@ -40,6 +40,7 @@ group :test do
   gem 'simplecov'
   gem 'vcr'
   gem 'webmock'
+  gem 'multipart-post'
 end
 
 group :development, :test do

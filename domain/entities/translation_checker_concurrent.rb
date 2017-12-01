@@ -29,11 +29,9 @@ module TranslateThis
                        label_entity, lang_entity
                      )
           if trans_db.nil?
-            Concurrent::Promise.execute do
-              translation = trans_mapper.load(label_entity, target_lang)
-              trans_db = trans_repository.find_or_create(translation)
-              label_repository.add_translation(label_entity, trans_db)
-            end
+            translation = trans_mapper.load(label_entity, target_lang)
+            trans_db = Concurrent::Promise.execute { trans_repository.find_or_create(translation) }.value
+            label_repository.add_translation(label_entity, trans_db)
           end
           trans_result = TranslationResult.new(trans_db.label.label_text,
                                                trans_db.translated_text,

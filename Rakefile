@@ -12,6 +12,11 @@ Rake::TestTask.new(:spec) do |t|
   t.warning = false
 end
 
+desc 'run bench'
+task :bench do
+  sh 'ruby ./spec/translate_this_concurrency_bench.rb'
+end
+
 desc 'run console'
 task :console do
   sh 'pry -r ./spec/test_load_all'
