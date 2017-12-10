@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'rake/testtask'
+require 'aws-sdk-sqs'
 
 task :default do
   puts `rake -T`
@@ -138,6 +139,23 @@ namespace :db do
       end
     rescue Sequel::DatabaseError
       puts 'DB does not exist, cannot wipe'
+    end
+  end
+
+  desc 'Create SQS queue for Shoryuken'
+  task :create => :config do
+    sqs = Aws::SQS::Client.new(region: @config.AWS_REGION)
+
+    begin
+      queue = sqs.create_queue(
+        queue_name: @config.CLONE_QUEUE,
+        attributes: {
+          FifoQueue: 'true',
+          ContentBasedDeduplication: 'true'
+        }
+      )
+    rescue => e
+      puts "Error creating queue: #{e}"
     end
   end
 end

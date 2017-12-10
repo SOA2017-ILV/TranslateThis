@@ -32,6 +32,10 @@ gem 'roar'
 gem 'dry-monads'
 gem 'dry-transaction'
 
+# Background Worker
+gem 'aws-sdk-sqs', '~> 1'
+gem 'shoryuken', '~> 3'
+
 group :test do
   gem 'minitest'
   gem 'minitest-rg'
