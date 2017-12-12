@@ -27,6 +27,10 @@ module TranslateThis
         end
         @img
       end
+
+      def labels?
+        @img.labels.any?
+      end
     end
   end
 end

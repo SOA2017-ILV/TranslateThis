@@ -29,7 +29,6 @@ module TranslateThis
                                                               input[:routing],
                                                               input[:img])
       stored_img = label_checker.check_labels
-
       if stored_img.labels
         Right(config: input[:config], routing: input[:routing],
               img: stored_img)
