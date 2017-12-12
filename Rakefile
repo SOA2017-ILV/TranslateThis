@@ -13,6 +13,12 @@ Rake::TestTask.new(:spec) do |t|
   t.warning = false
 end
 
+desc 'Keep rerunning tests upon changes'
+task :respec => :config do
+  puts 'REMEMBER: need to run `rake run:[dev|test]:worker` in another process'
+  sh "rerun -c 'rake spec' --ignore 'coverage/*' --ignore '#{@config.REPOSTORE_PATH}/*'"
+end
+
 desc 'run console'
 task :console do
   sh 'pry -r ./spec/test_load_all'
@@ -51,6 +57,25 @@ namespace :run do
 
   task :app_test do
     sh 'RACK_ENV=test rackup -p 9292'
+  end
+end
+
+namespace :worker do
+  namespace :run do
+    desc 'Run the background cloning worker in development mode'
+    task :development => :config do
+      sh 'RACK_ENV=development bundle exec shoryuken -r ./workers/translate_image_worker.rb -C ./workers/shoryuken_dev.yml'
+    end
+
+    desc 'Run the background cloning worker in testing mode'
+    task :test => :config do
+      sh 'RACK_ENV=test bundle exec shoryuken -r ./workers/translate_image_worker.rb -C ./workers/shoryuken_test.yml'
+    end
+
+    desc 'Run the background cloning worker in production mode'
+    task :production => :config do
+      sh 'RACK_ENV=production bundle exec shoryuken -r ./workers/translate_image_worker.rb -C ./workers/shoryuken.yml'
+    end
   end
 end
 

@@ -22,5 +22,6 @@ class TranslateImageWorker
 
   def perform(_sqs_msg, worker_request)
     # Perform worker action
+    puts "RUNNING SOME MAGIC HERE"
   end
 end
