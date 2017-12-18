@@ -3,6 +3,7 @@
 require 'roda'
 require 'rbnacl/libsodium'
 require 'base64'
+require 'http'
 
 module TranslateThis
   # Web API
@@ -70,32 +71,35 @@ module TranslateThis
 
           routing.on 'additional_images' do
             routing.post do
+              img_url = 'https://www.googleapis.com/customsearch/v1'
+              query_params = {
+                v: '1.0',
+                searchType: 'image',
+                q: '',
+                safe: 'high',
+                fields: 'items(link)',
+                rsz: 3,
+                cx: app.config.GOOGLE_SEARCH_CX,
+                key: app.config.GOOGLE_API_KEY
+              }
+              labels_array = MultiJson.load(routing.body)['labels']
               response = {}
               response['additional_images'] = []
-              dog_hash = {}
-              dog_hash['label'] = 'Dog'
-              dog_hash['links'] = []
-              dog_hash['links'].push('https://www.what-dog.net/Images/faces2/scroll0015.jpg')
-              dog_hash['links'].push('https://yt3.ggpht.com/EdjnobpzppDl5pSVU2s2AUIiFS0qBfT8Jdodw-FHMhugJK5zmzWDLkpqDVtpnaLSP66M5F8nqINImLKGtQ=s900-nd-c-c0xffffffff-rj-k-no')
-              dog_hash['links'].push('https://i.amz.mshcdn.com/2xXpy52DS30uKJBrQm-qI1JDAbc=/fit-in/1200x9600/https%3A%2F%2Fblueprint-api-production.s3.amazonaws.com%2Fuploads%2Fcard%2Fimage%2F454852%2Fc149fd02-3174-46f9-9b58-d7026cc5ada9.jpg')
-
-              corgi_hash = {}
-              corgi_hash['label'] = 'Corgi'
-              corgi_hash['links'] = []
-              corgi_hash['links'].push('https://www.pets4homes.co.uk/images/breeds/50/large/d248d59954bb644e4437cce1758a9ce2.jpg')
-              corgi_hash['links'].push('https://www.pawculture.com/uploads/corgi-butts-main.jpg')
-              corgi_hash['links'].push('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSf-1QO4dErgFmfcI_UPFeNZVghe8WVhESj8_ljF0VQBxigfnPgUg')
-              canine_hash = {}
-
-              canine_hash['label'] = 'Canine'
-              canine_hash['links'] = []
-              canine_hash['links'].push('https://www.what-dog.net/Images/faces2/scroll0015.jpg')
-              canine_hash['links'].push('https://yt3.ggpht.com/EdjnobpzppDl5pSVU2s2AUIiFS0qBfT8Jdodw-FHMhugJK5zmzWDLkpqDVtpnaLSP66M5F8nqINImLKGtQ=s900-nd-c-c0xffffffff-rj-k-no')
-              canine_hash['links'].push('https://i.amz.mshcdn.com/2xXpy52DS30uKJBrQm-qI1JDAbc=/fit-in/1200x9600/https%3A%2F%2Fblueprint-api-production.s3.amazonaws.com%2Fuploads%2Fcard%2Fimage%2F454852%2Fc149fd02-3174-46f9-9b58-d7026cc5ada9.jpg')
-
-              response['additional_images'].push(dog_hash)
-              response['additional_images'].push(corgi_hash)
-              response['additional_images'].push(canine_hash)
+              labels_array.each do |label|
+                query_params[:q] = label
+                http_response = HTTP.get(
+                  img_url,
+                  params: query_params
+                )
+                data = MultiJson.load(http_response.body)
+                hash = {}
+                hash['label'] = label
+                hash['links'] = []
+                hash['links'].push(data['items'][0]['link'])
+                hash['links'].push(data['items'][1]['link'])
+                hash['links'].push(data['items'][2]['link'])
+                response['additional_images'].push(hash)
+              end
 
               response.to_json
             end
