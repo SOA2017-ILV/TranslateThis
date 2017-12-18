@@ -95,9 +95,9 @@ module TranslateThis
                 hash = {}
                 hash['label'] = label
                 hash['links'] = []
-                hash['links'].push(data['items'][0]['link'])
-                hash['links'].push(data['items'][1]['link'])
-                hash['links'].push(data['items'][2]['link'])
+                data['items'].each do |item|
+                  hash['links'].push(item['link'])
+                end
                 response['additional_images'].push(hash)
               end
 
