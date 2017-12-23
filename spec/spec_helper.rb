@@ -17,7 +17,7 @@ Rake::Task['db:wipe_pg'].invoke
 Rake::Task['db:create_pg'].invoke
 # For some weird reason Rake::Task isn't working here..
 # Rake::Task['db:migrate'].invoke
-sh "rake db:migrate"
+sh 'rake db:migrate'
 
 require_relative 'test_load_all'
 Rake::Task['db:seed'].invoke
@@ -25,9 +25,12 @@ Rake::Task['db:seed'].invoke
 IMAGE = 'spec/fixtures/demo-image.jpg'.freeze
 CORRECT_VI = YAML.safe_load(File.read('spec/fixtures/vision_results.yml'))
 CORRECT_TR = YAML.safe_load(File.read('spec/fixtures/translation_results.yml'))
+LANGUAGES_JSON = JSON.parse(File.read('spec/fixtures/ex_json_languages.json'))
 
 CASSETTES_FOLDER = 'spec/fixtures/cassettes'.freeze
-CASSETTE_FILE = 'translate_this'.freeze
+# CASSETTE_FILE = 'translate_this'.freeze
+GATEWAY_FILE = 'translate_this_gateway'.freeze
+API_FILE = 'translate_this_api'.freeze
 
 VCR.configure do |c|
   c.cassette_library_dir = CASSETTES_FOLDER
