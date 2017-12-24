@@ -43,7 +43,7 @@ describe 'Tests TranslateThis API' do
     it 'SAD:' do
     end
 
-    it 'BAD:' do
+    it 'BAD: user prvides nsfw image and requests translation' do
     end
   end
 
