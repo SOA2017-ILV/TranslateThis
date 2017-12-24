@@ -4,7 +4,7 @@ require_relative 'spec_helper.rb'
 
 describe 'Tests TranslateThis library' do
   before do
-    VCR.insert_cassette CASSETTE_FILE,
+    VCR.insert_cassette GATEWAY_FILE,
                         record: :new_episodes,
                         match_requests_on: %i[method uri headers]
   end
@@ -75,15 +75,5 @@ describe 'Tests TranslateThis library' do
         trans_mapper.load(label_entity, 'zh-TW')
       end.must_raise TranslateThis::GoogleTranslation::Api::Errors::NotValid
     end
-
-    # #TODO: Will we give error if translating to same language?
-    # it 'SAD: translate text to same language' do
-    #   english_translator = TextTranslate::Translate.new(GOOGLE_TOKEN, 'zh-TW')
-    #   # Test_strings.map do |string|
-    #   STRINGS[1].map.with_index do |string, index|
-    #     eng_result = english_translator.translate_text(string)
-    #     _(eng_result.origin).must_match STRINGS[1][index]
-    #   end
-    # end
   end
 end
