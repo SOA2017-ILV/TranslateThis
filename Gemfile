@@ -28,6 +28,9 @@ gem 'dry-types'
 gem 'multi_json'
 gem 'roar'
 
+# Amazon SQS gems
+gem 'aws-sdk-sqs'
+
 # Services
 gem 'dry-monads'
 gem 'dry-transaction'

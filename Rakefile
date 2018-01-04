@@ -6,6 +6,13 @@ task :default do
   puts `rake -T`
 end
 
+# Configuration only -- not for direct calls
+task :config do
+  require_relative 'config/environment.rb' # load config info
+  @app = TranslateThis::Api
+  @config = @app.config
+end
+
 desc 'run tests'
 Rake::TestTask.new(:spec) do |t|
   t.pattern = 'spec/*_spec.rb'
@@ -50,6 +57,51 @@ namespace :run do
 
   task :app_test do
     sh 'RACK_ENV=test rackup -p 9292'
+  end
+end
+
+namespace :queues do
+  require 'aws-sdk-sqs'
+
+  desc 'Create SQS queue for Shoryuken'
+  task :create => :config do
+    sqs = Aws::SQS::Client.new(region: @config.AWS_REGION)
+
+    puts "Environment: #{@app.environment}"
+    [@config.CLONE_QUEUE, @config.NOTIFY_QUEUE].each do |queue_name|
+      begin
+        sqs.create_queue(
+          queue_name: queue_name,
+          attributes: {
+            FifoQueue: 'true',
+            ContentBasedDeduplication: 'true'
+          }
+        )
+
+        q_url = sqs.get_queue_url(queue_name: queue_name).queue_url
+        puts 'Queue created:'
+        puts "  Name: #{queue_name}"
+        puts "  Region: #{@config.AWS_REGION}"
+        puts "  URL: #{q_url}"
+      rescue StandardError => error
+        puts "Error creating queue: #{error}"
+      end
+    end
+  end
+
+  desc 'Purge messages in SQS queue for Shoryuken'
+  task :purge => :config do
+    sqs = Aws::SQS::Client.new(region: @config.AWS_REGION)
+
+    [@config.CLONE_QUEUE, @config.NOTIFY_QUEUE].each do |queue_name|
+      begin
+        q_url = sqs.get_queue_url(queue_name: queue_name).queue_url
+        sqs.purge_queue(queue_url: q_url)
+        puts "Queue #{queue_name} purged"
+      rescue StandardError => error
+        puts "Error purging queue: #{error}"
+      end
+    end
   end
 end
 
