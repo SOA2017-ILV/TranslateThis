@@ -1,6 +1,2 @@
 queues:
-<<<<<<< HEAD
 - https://sqs.us-east-1.amazonaws.com/377783239298/dev-translatethis-queue.fifo
-=======
-- https://sqs.us-east-1.amazonaws.com/377783239298/dev-translatethis-queue_dev.fifo
->>>>>>> eb68e76205e25116012e23409b80073b35f22675
