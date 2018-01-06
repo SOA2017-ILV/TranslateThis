@@ -5,8 +5,8 @@ require_relative 'load_all'
 require 'econfig'
 require 'shoryuken'
 
-# Shoryuken worker class to translate images in parallel
-class TranslateImageWorker
+# Shoryuken worker class to download images images in parallel
+class DownloadImagesWorker
   extend Econfig::Shortcut
   Econfig.env = ENV['RACK_ENV'] || 'development'
   Econfig.root = File.expand_path('..', File.dirname(__FILE__))
@@ -16,11 +16,9 @@ class TranslateImageWorker
     secret_access_key: config.AWS_SECRET_ACCESS_KEY,
     region: config.AWS_REGION
   )
-
   include Shoryuken::Worker
-  shoryuken_options queue: config.TRANSLATE_IMAGE_QUEUE_URL, auto_delete: true
+  shoryuken_options queue: config.DOWNLOAD_IMAGE_QUEUE_URL, auto_delete: true
 
   def perform(_sqs_msg, worker_request)
-    # Perform worker action
   end
 end

@@ -1,2 +1,2 @@
 queues:
-- https://sqs.../codepraise-clone.fifo
+- https://sqs.us-east-1.amazonaws.com/377783239298/dev-translatethis-queue.fifo
