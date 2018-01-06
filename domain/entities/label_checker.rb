@@ -11,7 +11,8 @@ module TranslateThis
       end
 
       def check_labels
-        if @img.labels.size.zero?
+        # <= 1 because we might assign 1 label when downloading additional images
+        if @img.labels.size <= 1
           label_mapper = TranslateThis::GoogleVision::LabelMapper
                          .new(@config)
           img_path = @routing['img'][:tempfile]

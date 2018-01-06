@@ -71,6 +71,18 @@ module TranslateThis
 
           routing.on 'additional_images' do
             routing.post do
+              #TODO
+              # Unique request id
+              # request_unique = [request.env, request.path, Time.now]
+              # request_id = (request_unique.map(&:to_s).join).hash
+              # # Get additional images
+              # additional_images_result = GetAdditionalImages.new.call(
+              #   unique_id: request_id,
+              #   config: app.config,
+              #   routing: routing
+              # )
+
+              #additional_images_result
               img_url = 'https://www.googleapis.com/customsearch/v1'
               query_params = {
                 v: '1.0',
