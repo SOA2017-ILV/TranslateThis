@@ -26,6 +26,9 @@ class DownloadImagesWorker
                            # .from_json(request_json)
 
     request_hash = JSON.parse(request_json)
+    puts 'request_hash'
+    puts request_hash
+    puts 'request_hash'
     channel_id = request_hash['id']
     response = {}
     response['additional_images'] = []
@@ -39,6 +42,9 @@ class DownloadImagesWorker
       label_counter += counter_piece
     end
 
+    puts '-----------------------------'
+    puts response.to_json
+    puts '-----------------------------'
     publish(channel_id, response.to_json)
   end
 

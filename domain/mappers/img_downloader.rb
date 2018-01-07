@@ -14,7 +14,7 @@ module TranslateThis
       query_params = {
         v: '1.0',
         searchType: 'image',
-        q: 'dog',
+        q: @label,
         safe: 'high',
         fields: 'items(link)',
         rsz: 3,
