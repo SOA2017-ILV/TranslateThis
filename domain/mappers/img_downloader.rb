@@ -28,6 +28,7 @@ module TranslateThis
       )
 
       data = MultiJson.load(http_response.body)
+      puts data
       hash = {}
       hash['label'] = @label
       hash['links'] = []
