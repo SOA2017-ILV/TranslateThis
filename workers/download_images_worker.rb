@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require_relative 'load_all'
-
+require 'http'
 require 'econfig'
 require 'shoryuken'
 
@@ -26,11 +26,31 @@ class DownloadImagesWorker
                            # .from_json(request_json)
 
     request_hash = JSON.parse(request_json)
+    channel_id = request_hash['id']
+    response = {}
+    response['additional_images'] = []
+    counter_piece = 100/request_hash['labels'].size
+    label_counter = counter_piece
+    request_hash['labels'].each do |label|
+      img_downloader = TranslateThis::ImageDownloader.new(label['label_text'])
+      downloaded_images = img_downloader.download
+      response['additional_images'].push(downloaded_images)
+      publish(channel_id, label_counter)
+      label_counter += counter_piece
+    end
 
-
-
-    img_downloader = TranslateThis::ImageDownloader.new(request_hash['labels'])
-    img_downloader.download
-    'b'
+    publish(channel_id, response.to_json)
   end
+
+  def publish(channel, message)
+  # puts "Posting message: #{message}"
+  HTTP.headers(content_type: 'application/json')
+      .post(
+        "#{DownloadImagesWorker.config.API_URL}/faye",
+        body: {
+          channel: "/#{channel}",
+          data: message
+        }.to_json
+      )
+end
 end

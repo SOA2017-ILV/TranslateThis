@@ -19,11 +19,14 @@ module TranslateThis
       stored_labels = multiple_labels_checker.check_labels
       if stored_labels
         Right(config: input[:config], routing: input[:routing],
-              stored_labels: stored_labels, db: input[:db])
+              stored_labels: stored_labels, db: input[:db],
+              id: input[:id])
       else
         msg = 'There was an error with your sent labels. Please try again'
         Left(Result.new(:bad_request, msg))
       end
+    rescue
+      Left(Result.new(:internal_error, 'Could not get labels'))
     end
 
     def find_image_or_download(input)
@@ -41,12 +44,11 @@ module TranslateThis
         end
       end
       if stored_labels_images_min
-        Right(stored_images)
+        Right(Result.new(:ok, {additional_images: stored_labels_images['additional_images']}))
       else
         download_img_request = download_img_request_json(input)
-
         DownloadImagesWorker.perform_async(download_img_request.to_json)
-        Left(Result.new(:processing, 'Processing the additional images request'))
+        Left(Result.new(:processing, { id: input[:id] }))
       end
     rescue
       Left(Result.new(:internal_error, 'Could not get additional images'))
@@ -55,7 +57,7 @@ module TranslateThis
     private
 
     def download_img_request_json(input)
-      download_img_request = DownloadImgRequest.new(input[:stored_labels])
+      download_img_request = DownloadImgRequest.new(input[:stored_labels], input[:id])
       DownloadImgRequestRepresenter.new(download_img_request)
     end
   end

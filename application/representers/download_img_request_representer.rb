@@ -7,5 +7,6 @@ module TranslateThis
     include Roar::JSON
 
     collection :labels, extend: LabelRepresenter, class: OpenStruct
+    property :id
   end
 end
