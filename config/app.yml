@@ -14,4 +14,4 @@ test:
   db_name: translate_this_test
 
 production:
-  API_URL: 'https://translate-this-api.herokuapp.com/'
+  API_URL: 'https://translate-this-api.herokuapp.com'
