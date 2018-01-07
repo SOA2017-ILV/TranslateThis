@@ -12,10 +12,14 @@ module TranslateThis
 
 
     def find_labels_or_create(input)
+      multiple_labels_checker = TranslateThis::Entity::MultipleLabelChecker.new(
+                                  input[:config],
+                                  input[:routing]
+                                )
       stored_labels = multiple_labels_checker.check_labels
       if stored_labels
         Right(config: input[:config], routing: input[:routing],
-              labels: stored_labels)
+              stored_labels: stored_labels, db: input[:db])
       else
         msg = 'There was an error with your sent labels. Please try again'
         Left(Result.new(:bad_request, msg))
@@ -23,12 +27,36 @@ module TranslateThis
     end
 
     def find_image_or_download(input)
+      multiple_imgs_checker = TranslateThis::Entity::MultipleImagesChecker.new(
+                                input[:config],
+                                input[:stored_labels],
+                                input[:db]
+                              )
+
+      stored_labels_images = multiple_imgs_checker.check_images
+      stored_labels_images_min = true
+      stored_labels_images['additional_images'].each do |stored_labels_image|
+        if stored_labels_image['links'].size < 3
+          stored_labels_images_min = false
+        end
+      end
+      if stored_labels_images_min
+        Right(stored_images)
+      else
+        download_img_request = download_img_request_json(input)
+
+        DownloadImagesWorker.perform_async(download_img_request.to_json)
+        Left(Result.new(:processing, 'Processing the additional images request'))
+      end
+    rescue
+      Left(Result.new(:internal_error, 'Could not get additional images'))
+    end
+
+    private
+
+    def download_img_request_json(input)
+      download_img_request = DownloadImgRequest.new(input[:stored_labels])
+      DownloadImgRequestRepresenter.new(download_img_request)
     end
   end
 end
-
-# Find or create label provided
-# find or download images
-  # if images >= 3 return
-  # else
-    # download images worker perform async

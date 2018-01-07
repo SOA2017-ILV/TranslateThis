@@ -10,12 +10,11 @@ module TranslateThis
       end
 
       def check_labels
-
         request_labels = MultiJson.load(@routing.body)['labels']
         stored_labels = []
         label_repository = Repository::For[TranslateThis::Entity::Label]
         stored_lang_en = Repository::For[TranslateThis::Entity::Language]
-                      .find_language_code('en')
+                         .find_language_code('en')
         request_labels.map do |request_label|
           label_entity = Entity::Label.new(
             id: nil,
@@ -25,6 +24,8 @@ module TranslateThis
           stored_label = label_repository.find_or_create(label_entity)
           stored_labels.push(stored_label)
         end
+
+        stored_labels
       end
     end
   end

@@ -18,10 +18,10 @@ class TranslateImageWorker
   )
 
   include Shoryuken::Worker
-  shoryuken_options queue: config.TRANSLATE_IMAGE_QUEUE_URL, auto_delete: true
+  # shoryuken_options queue: config.TRANSLATE_IMAGE_QUEUE_URL, auto_delete: true
 
   def perform(_sqs_msg, worker_request)
     # Perform worker action
-    puts "RUNNING SOME MAGIC HERE"
+    # puts "RUNNING SOME MAGIC HERE"
   end
 end

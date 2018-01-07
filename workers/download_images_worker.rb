@@ -6,6 +6,7 @@ require 'econfig'
 require 'shoryuken'
 
 # Shoryuken worker class to download images images in parallel
+# bundle exec shoryuken -r ./workers/download_images_worker.rb -C ./workers/shoryuken_dev.yml
 class DownloadImagesWorker
   extend Econfig::Shortcut
   Econfig.env = ENV['RACK_ENV'] || 'development'
@@ -19,6 +20,17 @@ class DownloadImagesWorker
   include Shoryuken::Worker
   shoryuken_options queue: config.DOWNLOAD_IMAGE_QUEUE_URL, auto_delete: true
 
-  def perform(_sqs_msg, worker_request)
+  def perform(_sqs_msg, request_json)
+    # download_img_request = TranslateThis::DownloadImgRequestRepresenter
+                           # .new(TranslateThis::DownloadImgRequest.new)
+                           # .from_json(request_json)
+
+    request_hash = JSON.parse(request_json)
+
+
+
+    img_downloader = TranslateThis::ImageDownloader.new(request_hash['labels'])
+    img_downloader.download
+    'b'
   end
 end

@@ -9,6 +9,11 @@ module TranslateThis
         rebuild_entity(db_record)
       end
 
+      def self.find_images_label(label, db)
+        # SELECT * FROM `images_labels` WHERE (`label_id` = label.id)
+        db.fetch("SELECT * FROM images_labels WHERE label_id = ?", label.id).all
+      end
+
       def self.find_hash_summary(hash_summary)
         db_record = Database::ImageOrm.first(hash_summary: hash_summary)
         rebuild_entity(db_record)

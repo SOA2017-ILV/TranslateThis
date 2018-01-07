@@ -71,49 +71,58 @@ module TranslateThis
 
           routing.on 'additional_images' do
             routing.post do
-              #TODO
               # Unique request id
-              # request_unique = [request.env, request.path, Time.now]
-              # request_id = (request_unique.map(&:to_s).join).hash
-              # # Get additional images
-              # additional_images_result = GetAdditionalImages.new.call(
-              #   unique_id: request_id,
-              #   config: app.config,
-              #   routing: routing
-              # )
+              request_unique = [request.env, request.path, Time.now]
+              request_id = (request_unique.map(&:to_s).join).hash
 
-              #additional_images_result
-              img_url = 'https://www.googleapis.com/customsearch/v1'
-              query_params = {
-                v: '1.0',
-                searchType: 'image',
-                q: '',
-                safe: 'high',
-                fields: 'items(link)',
-                rsz: 3,
-                cx: app.config.GOOGLE_SEARCH_CX,
-                key: app.config.GOOGLE_API_KEY
-              }
-              labels_array = MultiJson.load(routing.body)['labels']
-              response = {}
-              response['additional_images'] = []
-              labels_array.each do |label|
-                query_params[:q] = label
-                http_response = HTTP.get(
-                  img_url,
-                  params: query_params
-                )
-                data = MultiJson.load(http_response.body)
-                hash = {}
-                hash['label'] = label
-                hash['links'] = []
-                data['items'].each do |item|
-                  hash['links'].push(item['link'])
-                end
-                response['additional_images'].push(hash)
-              end
+              # Get additional images
+              # puts 'a1'
+              # images_label = app.DB.fetch("SELECT * FROM images_labels WHERE label_id = ?", 1).all
+              # puts 'a2'
+              # puts images_label
+              # puts 'a3'
+              additional_images_result = GetAdditionalImages.new.call(
+                unique_id: request_id,
+                config: app.config,
+                routing: routing,
+                db: app.DB
+              )
+              'abc'
 
-              response.to_json
+              # img_url = 'https://www.googleapis.com/customsearch/v1'
+              # puts(app.config.GOOGLE_SEARCH_CX)
+              # puts(app.config.GOOGLE_API_KEY)
+              # query_params = {
+              #   v: '1.0',
+              #   searchType: 'image',
+              #   q: '',
+              #   safe: 'high',
+              #   fields: 'items(link)',
+              #   rsz: 3,
+              #   cx: app.config.GOOGLE_SEARCH_CX,
+              #   key: app.config.GOOGLE_API_KEY
+              # }
+              # labels_array = MultiJson.load(routing.body)['labels']
+              # response = {}
+              # response['additional_images'] = []
+              # labels_array.each do |label|
+              #   query_params[:q] = label
+              #   http_response = HTTP.get(
+              #     img_url,
+              #     params: query_params
+              #   )
+              #   data = MultiJson.load(http_response.body)
+              #   hash = {}
+              #   hash['label'] = label
+              #   hash['links'] = []
+              #   data['items'].each do |item|
+              #     hash['links'].push(item['link'])
+              #   end
+              #   response['additional_images'].push(hash)
+              # end
+              #
+              # response.to_json
+
             end
           end
           # /api/v0.1/language branch
