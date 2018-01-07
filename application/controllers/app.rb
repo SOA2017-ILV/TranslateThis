@@ -3,6 +3,7 @@
 require 'roda'
 require 'rbnacl/libsodium'
 require 'base64'
+require 'http'
 
 module TranslateThis
   # Web API
@@ -68,6 +69,25 @@ module TranslateThis
             end
           end
 
+          routing.on 'additional_images' do
+            routing.post do
+              # Unique request id
+              request_unique = [request.env, request.path, Time.now]
+              request_id = (request_unique.map(&:to_s).join).hash
+
+              additional_images_result = GetAdditionalImages.new.call(
+                id: request_id,
+                config: app.config,
+                routing: routing,
+                db: app.DB
+              )
+              http_response = HttpResponseRepresenter
+                              .new(additional_images_result.value)
+              response.status = http_response.http_code
+              http_response.to_json
+
+            end
+          end
           # /api/v0.1/language branch
           routing.on 'language' do
             routing.is do

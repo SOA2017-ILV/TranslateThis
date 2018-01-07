@@ -1,13 +1,17 @@
 ---
 development:
+  API_URL: 'http://localhost:9292'
   # sqlite
   # db_filename: infrastructure/database/dev.db
   #PostgreSQL
   db_name: translate_this_dev
 
 test:
+  API_URL: 'http://localhost:9292'
   # sqlite
   # db_filename: infrastructure/database/test.db
   #PostgreSQL
   db_name: translate_this_test
-  
+
+production:
+  API_URL: 'https://translate-this-api.herokuapp.com/'

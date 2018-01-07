@@ -14,6 +14,11 @@ gem 'rake'
 gem 'rbnacl-libsodium'
 gem 'roda'
 
+# Parallel worker
+gem 'aws-sdk-sqs', '~> 1'
+gem 'faye', '~> 1'
+gem 'shoryuken', '~> 3'
+
 # Database related
 gem 'hirb'
 gem 'pg'
